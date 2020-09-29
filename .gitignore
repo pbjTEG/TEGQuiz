@@ -78,3 +78,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Overrides for this project
+!examples/lib/*

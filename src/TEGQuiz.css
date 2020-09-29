@@ -1,0 +1,10 @@
+/* These styles just illustrate what the library does.
+ * You really want to override or edit all of these.
+ */
+
+.selected {
+	background: black;
+	color: white;
+	display: inline-block;
+	padding: 2pt 2pt 0;
+}

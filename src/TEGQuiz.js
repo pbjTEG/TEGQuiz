@@ -1,172 +1,121 @@
+/* TEGQuiz
+ * Turn a form into an identity or trivia quiz.
+ *
+ * Copyright © 2020, PMG / The Production Management Group, Ltd.
+ * Released under the MIT license.
+ *
+ * The Engage Group <engage@engageyourcause.com>
+ */
 function TEGQuiz(Options) {
 	var TEGQuiz = this;
+	// constants
+
 	// default Options
 	TEGQuiz.options = {
 		// CSS selector for the form
 		formSelector: 'form',
 
-		// know window size categories in case we want to do something special
-		isMobile         : (window.innerWidth < 700),
-		isTablet         : (window.innerWidth > 699 && window.innerWidth < 1030),
-		isDesktop        : (window.innerWidth > 1029),
-
-		/* questions and answers can be defined in the HTML or populated directly. If
-		 * they are populated directly then additional custom code must be added to
-		 * render them on the page.
+		/* Collect information about the quiz questions so
+		 * we can track answers and count them.
 		 */
-		questionSelecctor    : 'input[type="checkbox"], input[type="number"], input[type="radio"], input[type="range"], input[type="tel"], input[type="text"], select',
-		questionExcludeSelector : "#firstName, #lastName, #email", // don't include these fields in the list of questions
-		quesitonBlockSelector : 'div.question'
-		questions : {},
-		answerAttribute : 'data-answer',
-		answers : {},
+		questionSelector       : 'input[type="checkbox"], input[type="number"], ' +
+		                         'input[type="radio"], input[type="range"], select', // collect the HTML elements which match this selector
+		questionExcludeSelector: '#firstName, #lastName, #email', // don't include the fields which match this selector
+		questions              : {},// a jQuery object for all the questions
+
+		/* If answerLabelSelector is set, the library will attempt
+		 * to add the value of answerHighlightClass as a CSS class
+		 * name to the field label when the input field changes.
+		 */
+		answerHighlightClass: 'selected',
 
 		/* Add collections of custom functions to run after a question is
-		 * asked and after a question is answered. Functions will be fired
-		 * in alphabetical order by key name.
+		 * answered. These will be run as onClick event handlers.
 		 */
-		afterAnswer      : {},
-		afterQuestion    : {},
-
-		// question navigation
-		nextQuestion     : function() {
-			jQuery(TEGQuiz.options.questionBlockSelector)
-				.removeClass('current')
-				.nextSibling(TEGQuiz.options.questionBlockSelector).addClass('current');
-
-			// allow for client or form specific function
-			if (TEGQuiz.afterQuestion !== null) {
-				TEGQuiz.afterQuestion(jQuery(this));
-			}
+		afterAnswer: {
+			// runs after every question
+			everyTime: function(event) {
+				// update the results
+				TEGQuiz.form
+				       .find(TEGQuiz.options.resultSelector)
+				       .html(TEGQuiz.quiz.getResults());
+				return true;
+			},
+			/* Example Function for a Specific Question
+			 *
+			 * The key value for each entry must match the ID of the
+			 * answer label for which it is to run. The function
+			 * will receive the event that fired the onClick
+			 * handler.
+			 * 'questionID': function(event) {
+			 *
+			 *    if (console) {
+			 *      console.log('afterAnswer.questionID\n' +
+			 *                  'this = ' + this + '\n' +
+			 *                  'event = ' + event + '\n');
+			 *    }
+			 * },
+			 */
 		},
-		previousQuestion     : function() {
-			jQuery(TEGQuiz.options.questionBlockSelector)
-				.removeClass('current')
-				.previousSibling(TEGQuiz.options.questionBlockSelector).addClass('current');
 
-			// allow for client or form specific function
-			if (TEGQuiz.afterQuestion !== null) {
-				TEGQuiz.afterQuestion(jQuery(this));
-			}
-		},
+		// find the submit button
+		submitSelector: 'input[type="submit"]',
 
-		// front end validation
-		useParsley            : window.hasOwnProperty('Parsley'),
-		// exclude some fields from getting data-parsley-required attribute
-		excludeParsley        : [],
+		// fake pages
+		usePagination    : typeof TEGFakePages === 'function',
+		paginationOptions: {}, // use defaults unless overwritten by configuration
 
 		// define device window sizes for adaptive styles and behavior
-		windowSizes    : {
-			mobileMax : 600,
-			tabletMin : 599,
-			tabletMax : 961,
-			desktopMin: 968,
-			tallMin   : 820
+		useWindowSize    : typeof $.windowSize === 'object',
+		windowSizeOptions: {
+			// see TEG jQuery Utilities for configuration options
 		},
 
-		// fake the pagination
-		currentPageNumber     : 1, // if > 0, set up fake pagination
-		/* Target page after form submits.
-		 * Engaging Networks forms make API calls to validate
-		 * the form when it submits and halts the submission
-		 * if problems are found. We need to let that happen
-		 * so the EN native validation can fire and post
-		 * errors to the page.
-		 */
-		newPageNumber         : 0,
-		lastPageNumber        : 3, // set by the length of the list of pages
-		pageBlock             : jQuery('<div/>'),
-		pageStartSelector     : '.step', // start of a fake page
-		pageExcludeSelector   : '.step-exclude', // don't include in fake page structure
-		pageItemClass         : 'step-item',
-		pageItemParentSelector: '', // find the parent element of the start of the page
-		pageIDPrefix          : 'step',
+		// trivia quiz
+		useTrivia    : typeof TQTrivia === 'function',
+		triviaOptions: {}, // use defaults unless overwritten by configuration
 
-		// generating breadcrumb navigation
-		breadcrumbs          : jQuery('<div class="row"></div>'), // if not empty, create breadcrumbs
-		/* Any HTML element in a breadcrumbItem* object will
-		 * be filled with the HTML content of the item
-		 * defined by pageStartSelector. With the default
-		 * settings for example:
-		 *
-		 * <h1 class='.step'>Donation Info<span class="desktopView">rmation</span></h1>
-		 *
-		 * will generate the breadcrumb
-		 *
-		 * <div class="col title">Donation Info<span class="desktopView">rmation</span></h1>
-		 *
-		 *
-		 * If the item defined by pageStartSelector has the
-		 * attribute data-breadcrumb, then the value of that
-		 * attribute will be rendered in the breadcrumb item.
-		 * With the default settings for example:
-		 *
-		 * <h1 class='.step' data-breadcrumb="Donation Info">Donation Information</h1>
-		 *
-		 * will generate the breadcrumb
-		 *
-		 * <div class="col title">Donation Info</h1>
-		 */
-		// @formatter:off
-		breadcrumbItemMobile : jQuery('<div class="row"></div>')
-			.append('<div class="col-2 previous">&nbsp;</div>')
-			.append('<div class="col title" />')
-			.append('<div class="col-2 next">&nbsp;</div>'),
-		// @formatter:on
-		breadcrumbItemTablet : jQuery('<div class="col title"></div>'),
-		breadcrumbItemDesktop: jQuery('<div class="col title"></div>'),
+		//  identity quiz
+		useWhoAmI    : typeof TQWhoAmI === 'function',
+		whoAmIOptions: {}, // use defaults unless overwritten by configuration
 
-		// page button navigation
-		pageButtons     : jQuery('<div class="step-nav row"/>'),
-		pageButtonColumn: jQuery('<div class="col-12 col-md-6" />'),
-		backButton      : jQuery('<button class="step-back">Back</button>'),
-		continueButton  : jQuery('<button class="step-next">Continue</button>'),
-
-		/* Some customizations might need to re-render each
-		 * time the page appears. This object allows a custom
-		 * installation to define those callbacks.
-		 */
-		pageCallbacks: {
-			'1': {
-				beforeShow: function(pageNumber, pageObject) {
-					/* take some action before the page
-					 * appears and/or skip to the next page
-					 * by returning false
-					 */
-
-					if (console) {
-						console.log('beforeLoad default\n' +
-						            'pageNumber = ' + pageNumber + '\n' +
-						            'pageObject = ' + jQuery(pageObject).class + '\n');
-					}
-					return true;
-				},
-				beforeHide: function(pageNumber, pageObject) {
-					/* take some action before the page
-					 * disappears and/or prevent the user
-					 * from leaving the page by returning false
-					 */
-
-					if (console) {
-						console.log('beforeHide default\n' +
-						            'pageNumber = ' + pageNumber + '\n' +
-						            'pageObject = ' + jQuery(pageObject).prop('nodeName') + '\n' +
-						            '   ID      = ' + jQuery(pageObject).attr('id') + '\n' +
-						            '   class      = ' + jQuery(pageObject).attr('class') + '\n');
-					}
-					return true;
-				},
-			},
-		},
+		// quiz restuls
+		resultsBeforeSubmit: true, // show the quiz results before submitting form
+		resultSelector     : '.results', // CSS selector for result value to pass to the confirmation page
 
 		// allow code that runs after all of this
-		afterLoad: function() {
+		afterLoad: function(Options) {
+
+			if (console) {
+				console.log('TEGQuiz.afterLoad\n' +
+				            'Options = ' + Options + '\n');
+			}
 			return false;
-		}
+		},
+
+		/* Allow customization of the onSubmit handler.
+		 * Each entry in this collection will be called in alphabetical
+		 * order by key name.
+		 */
+		submitQue: {
+			// TQTrivia and TQWhoAmI will insert their handlers here.
+			'00500_quizHandler': function(event) {
+
+				if (console) {
+					console.warn('005_quizHandler not overridden as expected.');
+				} // end if console available
+				return true;
+			} // end ['005_quizHandler']()
+		}, // end submitQue
 
 	}; // end TEGQuiz.options
-   // override with options from new EngageENDonationForm() statement
+	// override with options from new TEGQuiz() statement
 	jQuery.extend(TEGQuiz.options, Options);
+
+	// allow form specific overrides
+	if (typeof TEGCustomQuiz !== 'undefined') {
+		jQuery.extend(TEGQuiz.options, TEGCustomQuiz);
+	}
 
 	// Parse query string arguments
 	TEGQuiz.args = {};
@@ -179,102 +128,266 @@ function TEGQuiz(Options) {
 				TEGQuiz.args[decodeURIComponent(nv[0])] = decodeURIComponent(nv[1].replace(/</g, ''));
 			}
 		}
-	});
-
-	// allow form specific overrides
-	if (typeof TEGCustom !== 'undefined') {
-		jQuery.extend(TEGQuiz.options, TEGCustom);
-	}
+	}); // end query string processing
 
 	// get the form and hide it
 	TEGQuiz.form = jQuery(TEGQuiz.options.formSelector).hide();
 
-	// collect questions
-	jQuery(document).ready(function(){
+	// if we're holding to show results before submitting. . .
+	if (TEGQuiz.options.resultsBeforeSubmit) {
+		// . . .then encourage the user to submit the form so we can capture data.
+		jQuery(window).on('beforeunload', function() {
+			return 'ignored value';
+		}); // end window.onBeforeUnload()
+	} // end if we're showing results before submitting
 
-	}); // end jQuery(document).ready
+	// run the event handlers for the questions
+	TEGQuiz.runAfterAnswer = function(event) {
 
-} // end TEGQuiz constructor
+		/* Some CMS systems make it hard to highlight selected answers with CSS.
+		 * Add some code to allow easy style attribution.
+		 */
+		if (TEGQuiz.options.answerHighlightClass !== '') {
 
-// generic code
-jQuery(document).ready(function() {
-	// Only run this code on the rendered page
-	/*if ( !/data\/1/.test(window.location.pathname) ) {
-	 return;
-	 }*/
+			var thisField = jQuery(this),
+			    thisLabel = TEGQuiz.form
+			                       .find('[for="' + thisField.attr('id') + '"]');
 
-	// make local reference to global configuration
-	// expand configuration by settings in form content
-	var TEG       = window.TEG,
-	    TEGCustom = window.TEGCustom || {};
-	jQuery.extend(TEG, TEGCustom);
+			switch (thisField.fieldType()) {
 
-	// make submit buttons show answer
-	jQuery(TEG.submitAnswerQuery)
-		.click(function(event) {
+				case 'radio':
+					// remove the highlight style from all radio buttons in this group
+					TEGQuiz.form
+					       .find('[name="' +
+					             thisField.attr('name') +
+					             '"]')
+					       .each(function(index) {
+						       TEGQuiz.form
+						              .find('[for="' + TEGQuiz.questions.eq(index).attr('id') + '"]')
+						              .removeClass(TEGQuiz.options.answerHighlightClass);
+					       });
+
+					if (thisField.is(':checked')) {
+						thisLabel.addClass(TEGQuiz.options.answerHighlightClass);
+					}
+					break;
+
+				case 'checkbox':
+					thisLabel.toggleClass(TEGQuiz.options.answerHighlightClass, thisField.is(':checked'));
+					break;
+
+				default:
+					thisLabel.toggleClass(TEGQuiz.options.answerHighlightClass, thisField.val() !== '');
+			} // end switch .fieldType()
+		} // end if we're highlighting answers
+
+		// function to run for every answer
+		TEGQuiz.options.afterAnswer.everyTime(event);
+
+		// if there's a custom function for this particular answer, run it
+		if (event.hasOwnProperty('targetElement') &&
+		    event.targetElement.hasOwnProperty('id') &&
+		    TEGQuiz.options.afterAnswer[event.targetElement.id])
+		{
+			// fire the question specific answer event handler
+			if (TEGQuiz.options.afterAnswer[event.targetElement.id]) {
+				TEGQuiz.options.afterAnswer[event.targetElement.id](event);
+			} // end if there's a question specific event handler
+		} // end if event.targetElement.id exists
+	}; // end runAfterAnswer()
+
+	// run the submit handlers for the form
+	TEGQuiz.submitHandler = function(event) {
+		var safeToGo = true;
+
+		// loop through the event handlers sorted alphabetically by key
+		var keys = Object.keys(TEGQuiz.options.submitQue).sort();
+		for (var counter = 0; counter < keys.length; counter++) {
+			var thisKey = keys[counter];
+
+			// If property exists and is a function
+			if (TEGQuiz.options.submitQue.hasOwnProperty(thisKey) &&
+			    typeof TEGQuiz.options.submitQue[thisKey] === 'function')
+			{
+
+				// log it
+				if (console) {
+					console.log('TEGQuiz.submitHandler Loop\n' +
+					            'thisKey = ' + thisKey + '\n');
+				}
+				/* And finally call it.
+				 * If any handlers return false then all will be false.
+				 */
+				safeToGo = safeToGo && TEGQuiz.options.submitQue[thisKey](event);
+			} // end if property exists
+		} // end loop through sorted object keys
+
+		// if all returned true
+		if (safeToGo) {
+
+			// If we're holding to show results before submitting. . .
+			if (TEGQuiz.options.resultsBeforeSubmit) {
+				//. . .then we don't need to hold the form anymore.
+				jQuery(window).off('beforeunload');
+			}
+
+		} else {
+			// otherwise, halt propagation.
 			event.preventDefault();
 			event.stopImmediatePropagation();
-			var answerList = jQuery(this).siblings('ul.answerList');
+		}
+		return safeToGo;
+	}; // end submitHandler()
 
-			answerList.addClass('answerShown');
-			TEG.showCorrect(answerList.find('li'));
-			TEG.showAnswer(jQuery(this));
-
-			// allow for client or form specific function
-			if (TEG.afterAnswer !== null) {
-				TEG.afterAnswer(jQuery(this));
-			}
-		});
-
-	// make answers highlight themselves on click
-	jQuery(TEG.answerItemQuery)
-		.click(function(event) {
-			event.preventDefault();
-			var thisAnswer = jQuery(this),
-			    answerList = thisAnswer.parent();
-
-			/* only show the selection if the answer
-			 * isn't shown
+	// there really needs to be a form element for this to work at all
+	if (TEGQuiz.form.length > 0) {
+		// collect questions
+		jQuery(document).ready(function() {
+			/* A quiz form should include only fixed-value fields such as
+			 * radio buttons, checkboxes, and select lists. But we need
+			 * room for future expansion and for per-client or per-form
+			 * customization.
+			 *
+			 * While we're in there, let's make sure there are unique
+			 * "id" attributes.
 			 */
-			if (!answerList.hasClass('answerShown')) {
+			TEGQuiz.questions =
+				TEGQuiz.form
+				       .find(TEGQuiz.options.questionSelector)
+				       .filter(function() {
+					       return !jQuery(this).is(TEGQuiz.options.questionExcludeSelector);
+				       })
+				       .change(TEGQuiz.runAfterAnswer);
 
-				// different behavior for multi-select
-				if (answerList.hasClass('multi')) {
-					// multi
-					thisAnswer.toggleClass('selected');
+			// return the number of answered questions
+			TEGQuiz.getAnswerCount = function() {
+				var numberAnswered = 0;
 
-				} else {
-					// single
-					jQuery(TEG.answerItemQuery).removeClass('selected');
-					thisAnswer.addClass('selected');
-				}
+				// clear the counted marker before counting the answered questions
+				TEGQuiz.questions
+				       .removeAttr('data-answerCounted')
+				       .each(function(index) {
+
+					       // if this item has not already been counted (since radio buttons and checkboxes might be counted as groups)
+					       if (TEGQuiz.questions.eq(index).attr('data-answerCounted') !== 'undefined') {
+
+						       // count by field type
+						       switch (TEGQuiz.questions.eq(index).fieldType()) {
+
+							       case 'radio':
+								       // check if any of this radio button group are checked
+								       if (
+									       TEGQuiz.questions
+									              .find('[name="' +
+									                    TEGQuiz.questions.eq(index) +
+									                    '"]:checked')
+								       )
+								       {
+									       numberAnswered++;
+								       }
+								       TEGQuiz.questions
+								              .find('[name="' + TEGQuiz.questions.eq(index) + '"]')
+								              .attr('data-answerCounted', 'true');
+								       break;
+
+							       case 'checkbox':
+								       // check if the checkbox is part of a fieldset
+								       var thisFieldset = TEGQuiz.questions.eq(index).closest('fieldset');
+
+								       /* If the checkbox is part of a fieldset, count all
+								        * checkboxes in the fieldset as a group.
+								        */
+								       if (thisFieldset.length > 0) {
+
+									       // if any of the checkboxes are checked
+									       if (thisFieldset.find('[type="checkbox"]:checked').length > 0) {
+										       numberAnswered++;
+									       } // end if any checkboxes in the
+									       thisFieldset.find('[type="checkbox"]')
+									                   .attr('data-answerCounted', 'true');
+
+								       } else {
+									       TEGQuiz.questions.eq(index)
+									              .attr('data-answerCounted', 'true');
+								       }
+								       break;
+
+							       default:
+								       numberAnswered++;
+								       TEGQuiz.questions.eq(index)
+								              .attr('data-answerCounted', 'true');
+						       } // end switch .fieldType()
+					       } // end if already counted
+				       }); // end each()
+			}; // end getAnswerCount()
+
+			TEGQuiz.submitButton = TEGQuiz.form.find(TEGQuiz.options.submitSelector);
+
+			// set up window size detection
+			TEGQuiz.windowSizes = false;
+
+			if (TEGQuiz.options.useWindowSize) {
+				TEGQuiz.windowSizes = new $.windowSize.init(TEGQuiz.options.windowSizeOptions);
 			}
-		});
 
-	// set up pagination
-	jQuery(TEG.questionQuery)
-		.parent()
-		.each(function(index, object) {
+			// swaddle the submit button
+			TEGQuiz.submmitted = false;
 
-			if (index === 0) {
-				jQuery(this).addClass('current');
-			}
-		});
+			// Initialize the quiz with the configured quiz type.
+			TEGQuiz.quiz = {
+				getResults: function() {
 
-	// show the results and donation link
-	jQuery(TEG.endQuizQuery)
-		.click(TEG.showFinal);
-
-	jQuery(TEG.nextQuery)
-		.on('click keydown', function(event) {
-			// change fake pages
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			setTimeout(function() {
-				// Don't leave this step if it has errors
-				if (jQuery('.en__component.en__component--copyblock.current').find(".en__field__error").length === 0) {
-					TEG.nextQuestion();
+					if (console) {
+						console.warn('WARNING: TEGQuiz.quiz.getResults not overridden.');
+					} // end if console available
 				}
-			}, 50);
-		});
-}); // end jQuery(document).ready
+			}; // end default TEGQuiz.quiz
+
+			// if trivia quiz
+			if (TEGQuiz.options.useTrivia) {
+				TEGQuiz.quiz = new TQTrivia(
+					jQuery.extend(TEGQuiz.options.triviaOptions,
+					              {questions: TEGQuiz.questions})
+				);
+
+			} else {
+
+				// if identity quiz
+				if (TEGQuiz.options.useWhoAmI) {
+					TEGQuiz.quiz = new TQWhoAmI(
+						jQuery.extend(TEGQuiz.options.whoAmIOptions,
+						              {questions: TEGQuiz.questions})
+					);
+				} // end if identity type
+			} // end if trivia type
+			jQuery.extend(TEGQuiz.options.submitQue, TEGQuiz.quiz.options.submitQue);
+
+			// set up pagination
+			if (TEGQuiz.options.usePagination) {
+				TEGQuiz.pages = new TEGFakePages(TEGQuiz.options.paginationOptions);
+			}
+
+			// run the afterLoad stuff
+			TEGQuiz.options.afterLoad(TEGQuiz.options);
+
+			// We do rather a lot of Engaging Networks customizations.
+			if (typeof window.EngagingNetworks === 'object') {
+				// if we're in EN, attach to their events
+				window.onEnSubmit = TEGQuiz.submitHandler;
+
+			} else {
+				TEGQuiz.form
+				       .submit(TEGQuiz.submitHandler);
+			}
+
+			// we're done, show the form
+			TEGQuiz.form.show();
+		}); // end jQuery(document).ready
+
+	} else {
+
+		if (console) {
+			console.log('TEGQuiz error: No form found.');
+		} // end if console available
+	} // end if form found
+} // end TEGQuiz constructor
