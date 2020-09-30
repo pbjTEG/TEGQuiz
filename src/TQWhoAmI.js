@@ -1,11 +1,14 @@
 /* TQWhoAmI
- * Turn a form into a fictional identity quiz like "Which Magical House Are You In?" or "What Kind of Vampire Would You Be?"
+ * Turn a form into a fictional identity quiz like "Which Magical House
+ * Are You In?" or "What Kind of Vampire Would You Be?"
  *
  * Copyright © 2020, PMG / The Production Management Group, Ltd.
  * Released under the MIT license.
  *
  * The Engage Group <engage@engageyourcause.com>
  */
+
+//TODO add token replacement to category.win strings
 
 function TQWhoAmI(Options) {
 	var TQWhoAmI = this;
@@ -45,7 +48,7 @@ function TQWhoAmI(Options) {
 			'00500_quizHandler': function(event) {
 
 				if (console) {
-					console.warn('005_quizHandler not overridden as expected.');
+					console.warn("TQWhoAmI.options.submitQue['005_quizHandler'] not overridden as expected.");
 				} // end if console available
 				return true;
 			} // end ['005_quizHandler']()
