@@ -1,0 +1,410 @@
+<!--
+  ~ Copyright (c) 2020. The Production Management Group, Ltd.
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Engage EN Donation Form</title>
+	<meta charset="UTF-8" />
+	<meta name="keywords" content="javascript, library, engaging networks, donation, form" />
+	<meta name="description" content="Creates a global object representing the donation form and various configuration options. Optionally generates a fake page structure with (optional) breadcrumb and (optional) button navigation." />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style>
+		body {
+			background: white;
+			margin: 0 auto;
+			max-width: 60rem;
+		}
+
+		td {
+			padding: 4pt;
+			vertical-align: top;
+		}
+
+		pre {
+			font-size: smaller;
+			max-width: 800px;
+			overflow: auto;
+		}
+
+		td > pre.prettyprint.lang-javascript.prettyprinted {
+			max-width: 20rem;
+			padding: .5rem;
+		}
+
+		tr:nth-child(odd) {
+			background: lightgray;
+		}
+
+		dt {
+			margin-top: 10pt;
+		}
+	</style>
+	<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+<h1>TEG Quiz Library</h1>
+<p>Simulates identity and trivia quizzes on a CMS static page or data acquisition form. The library expects the form to be the usual assortment of radio buttons seen on social media and clickbait sites.</p>
+<h2 id="Requires">Requires</h2>
+<ul>
+	<li><a href="https://jquery.com/download/">jQuery 3.5.1 or later</a></li>
+	<li><a href="https://github.com/pbjoiner/jquery-plugins">jQuery Debounce by Dimitry Filatov</a></li>
+</ul>
+<h2 id="Includes">Includes</h2>
+<ul>
+	<li>TEGQuiz.js, TEGQuiz.css<br />
+		Provides base functionality including input field detection and filtering.
+	</li>
+	<li>Quiz Type Plugin <a href="READMEWhoAmI.html">TQWhoAmI.js</a><br />
+		Provides functionality for identity quizzes such as those that tell a user what magical house they blong too or which character they would be in some entertainment.
+	</li>
+	<li>Quiz Type Plugin <a href="READMETrivia.html">TQTrivia.js</a><br />
+		Provides functionality for trivia quizzes.
+	</li>
+</ul>
+<h2 id="Installation">Installation</h2>
+<p>Link the styles and JavaScript in the <code class="prettyprint lang-javascript">&lt;head></code> element of the page.</p>
+<pre class="prettyprint lang-javascript">
+&lt;!--
+  Bootstrap Grid is used for the default breadcrumbs. If you're not using the breadcrumbs or
+  have your own content then you don't need this.
+-->
+&lt;link rel="stylesheet" href="https://server.name.com/path/bootstrap-grid.min.css" />
+&lt;!--
+  TEG Fake Pages provides the pagination of each question in the quiz. The styles do the
+  actual hiding and showing of content. The library just swaps class names. If you don't
+  want the fake pagination, don't include this or TEGFakePages.js below.
+-->
+&lt;link rel="stylesheet" href="https://server.name.com/path/TEGFakePages.css" />
+&lt;!--
+  The baseline TEGQuiz styles only provide highlighting for selected answers.
+-->
+&lt;link rel="stylesheet" href="https://server.name.com/path/TEGQuiz.css" />
+&lt;!-- Scripts should be in this order. This is a must. -->
+&lt;script src="https://server.name.com/path/jquery-3.5.0.min.js" type="text/javascript">&lt;/script>
+&lt;!-- TEG jQuery Utilities is required by TEGFakePages -->
+&lt;script src="https://server.name.com/path/TEGUtilities.js" type="text/javascript">&lt;/script>
+&lt;script src="https://server.name.com/path/TEGFakePages.js" type="text/javascript">&lt;/script>
+&lt;!-- TQWhoAmI.js defines behavior for an identity quiz. -->
+&lt;script src="https://server.name.com/path/TQWhoAmI.js" type="text/javascript">&lt;/script>
+&lt;!-- TEGQuiz.js provides baseline quiz functionality and initializes the quiz type. -->
+&lt;script src="https://server.name.com/path/TEGQuiz.js" type="text/javascript">&lt;/script>
+</pre>
+<p>Initialize the quiz object. This can be done in the <code class="prettyprint lang-javascript">&lt;body></code> element or in an external JS file.</p>
+<pre class="prettyprint lang-javascript">
+jQuery(document).ready(function() {
+  window.TEGForm = new TEGQuiz({
+                                 paginationOptions: {
+                                   pageItemParentSelector: '',
+                                 },
+                                 whoAmIOptions    : {
+                                   categories: {
+                                     'category01': {
+                                       count: 0,
+                                       win  : 'You are in Category 1!',
+                                     },
+                                     'category02': {
+                                       count: 0,
+                                       win  : 'You are in Category 2!',
+                                     },
+                                     'category03': {
+                                       count: 0,
+                                       win  : 'You are in Category 3!',
+                                     },
+                                     'category04': {
+                                       count: 0,
+                                       win  : 'You are in Category 4!',
+                                     },
+                                   }, // end categories
+                                   answers   : {
+                                     '#checkbox205': 'category01',
+                                     '#checkbox206': 'category02',
+                                     '#checkbox207': 'category03',
+                                     '#checkbox208': 'category04',
+                                   }, // end answers
+                                 }, // end whoAmIOptions
+                               });
+  // any additional stuff goes here
+}); // end jQuery(document).ready
+</pre>
+<p>For a functional example see <a href="examples/StaticFormExampleWhoAmI.html">Static Form Example Who Am I</a>.</p>
+<h2 id="Properties">Properties</h2>
+<table>
+	<tr>
+		<th>
+			Property
+		</th>
+		<th>
+			Type
+		</th>
+		<th>
+			Default
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="optionsProperty">options</td>
+		<td>Collection</td>
+		<td>See <a href="#Options">Options</a> below.</td>
+		<td>A collection of options for congifuring the quiz.</td>
+	</tr>
+	<tr>
+		<td id="args">args</td>
+		<td>Collection</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A collection of the query string parameters from the URL of the form.</td>
+	</tr>
+	<tr>
+		<td id="form">form</td>
+		<td>jQuery Object</td>
+		<td><code class="prettyprint lang-javascript">{[]}</code></td>
+		<td>jQuery object initialized with the HTML element selected by the <code class="prettyprint lang-javascript"><a href="#formSelector">formSelector</a></code> option below. </td>
+	</tr>
+	<tr>
+		<td id="questions">questions</td>
+		<td>jQuery Object</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A jQuery object containing the form fields which will be counted to score the results.</td>
+	</tr>
+	<tr>
+		<td id="submitButton">submitButton</td>
+		<td>jQuery Object</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A jQuery object containing the form submit button.</td>
+	</tr>
+	<tr>
+		<td id="submmitted">submmitted</td>
+		<td>Boolean</td>
+		<td><code class="prettyprint lang-javascript">false</code></td>
+		<td>Used in conjunction with the option <code class="prettyprint lang-javascript"><a href="#resultsBeforeSubmit">resultsBeforeSubmit</a></code> to control form submission.</td>
+	</tr>
+	<tr>
+		<td id="quiz">quiz</td>
+		<td>Collection</td>
+		<td>
+<pre class="prettyprint lang-javascript">{
+  getResults: function() {
+
+    if (console) {
+      console.warn('WARNING: TEGQuiz.quiz.getResults not overridden.');
+    } // end if console available
+  }
+}</pre></td>
+		<td>A JavaScript object containing the properties and functions defined by the <a href="#Includes">Quiz Type Plugin</a> used.</td>
+	</tr>
+</table>
+<h2 id="Methods">Methods</h2>
+<table>
+	<tr>
+		<th>
+			Method
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="runAfterAnswer">runAfterAnswer()</td>
+		<td>Runs the functions in the <code class="prettyprint lang-javascript"><a href="#afterAnswer">afterAnswer</a></code> collection option below.</td>
+	</tr>
+	<tr>
+		<td id="errorHandler">errorHandler()</td>
+		<td>Runs the functions in the <code class="prettyprint lang-javascript"><a href="#errorQueue">errorQueue</a></code> collection option below.</td>
+	</tr>
+	<tr>
+		<td id="submitHandler">submitHandler()</td>
+		<td>Runs the functions in the <code class="prettyprint lang-javascript"><a href="#submitQueue">submitQueue</a></code> collection option below.</td>
+	</tr>
+	<tr>
+		<td id="getAnswerCount">getAnswerCount()</td>
+		<td>Returns the number of questions answered.</td>
+	</tr>
+</table>
+<h2 id="Options">Options</h2>
+<table>
+	<tr>
+		<th>
+			Option
+		</th>
+		<th>
+			Type
+		</th>
+		<th>
+			Default
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="formSelector">formSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'form'</code></td>
+		<td>CSS selector to identify the form element. This object will be hidden so that all the various swapping and rearranging happens out of sight.</td>
+	</tr>
+	<tr>
+		<td id="questionSelector">questionSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'input[type="checkbox"], input[type="number"], input[type="radio"], input[type="range"], select'</code></td>
+		<td>CSS selector to identify the form fields.</td>
+	</tr>
+	<tr>
+		<td id="questionExcludeSelector">questionExcludeSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'#firstName, #lastName, #email'</code></td>
+		<td>CSS selector form fields to exclude from quiz processing.</td>
+	</tr>
+	<tr>
+		<td id="answerHighlightClass">answerHighlightClass</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'selected'</code></td>
+		<td>CSS class name to be added to the labels of selected quiz answers. If answerLabelSelector is set, the library will attempt to add the value of
+			<code class="prettyprint lang-javascript">answerHighlightClass</code> as a CSS class name to the field label when the input field changes.</td>
+	</tr>
+	<tr>
+		<td id="afterAnswer">afterAnswer</td>
+		<td>Collection</td>
+		<td>
+<pre class="prettyprint lang-javascript">{
+  // runs after every question
+  everyTime: function(event) {
+    // update the results
+    TEGQuiz.form
+           .find(TEGQuiz.options.resultSelector)
+           .html(TEGQuiz.quiz.getResults());
+    return true;
+  },
+}</pre></td>
+		<td>Collection of functions to run after questions are answered. The function named 
+			<code class="prettyprint lang-javascript">everyTime</code> will run when any answer is selected. Additional functions can be added for each question by adding a member with a key value matching the ID of a form element in the <a href="#questions"><code class="prettyprint lang-javascript">questions</code></a> collection.</td>
+	</tr>
+</table>
+<h3>Example of a Custom <code class="prettyprint lang-javascript">afterAnswer</code> Function for a Specific Question</h3>
+<pre class="prettyprint lang-javascript">{
+/* The key value for each entry must match the ID of the
+ * answer label for which it is to run. The function
+ * will receive the event that fired the onClick handler.
+ */
+'questionID': function(event) {
+    if (console) {
+      console.log('afterAnswer.questionID\n' +
+                  'this = ' + this + '\n' +
+                  'event = ' + event + '\n');
+    }
+  },
+}</pre>
+<table>
+	<tr>
+		<th>
+			Option
+		</th>
+		<th>
+			Type
+		</th>
+		<th>
+			Default
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="submitSelector">submitSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'input[type="submit"]'</code></td>
+		<td>CSS selector of the form submit button used to create the <a href="#submitButton"><code class="prettyprint lang-javascript">submitButton</code></a> property.</td>
+	</tr>
+	<tr>
+		<td id="usePagination">usePagination</td>
+		<td>Boolean</td>
+		<td><code class="prettyprint lang-javascript">typeof TEGFakePages === 'function'</code></td>
+		<td><code class="prettyprint lang-javascript">True</code> if the library <a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a> is available.</td>
+	</tr>
+	<tr>
+		<td id="paginationOptions">paginationOptions</td>
+		<td>Collection</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A collection of options to pass to TEG Fake Pages. See <a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a> for full documentation.</td>
+	</tr>
+	<tr>
+		<td id="useTrivia">useTrivia</td>
+		<td>Boolean</td>
+		<td><code class="prettyprint lang-javascript">typeof TQTrivia === 'function'</code></td>
+		<td><code class="prettyprint lang-javascript">True</code> if the <a href="#Includes">Quiz Type Plugin</a> <a href="READMETrivia.html">TEG Quiz Trivia</a> is available.</td>
+	</tr>
+	<tr>
+		<td id="triviaOptions">triviaOptions</td>
+		<td>Collection</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A collection of options to pass to TEG Quiz Trivia. See <a href="READMETrivia.html">the associated HTML file</a> for full documentation.</td>
+	</tr>
+	<tr>
+		<td id="useWhoAmI">useWhoAmI</td>
+		<td>Boolean</td>
+		<td><code class="prettyprint lang-javascript">typeof TQWhoAmI === 'function'</code></td>
+		<td><code class="prettyprint lang-javascript">True</code> if the <a href="#Includes">Quiz Type Plugin</a> <a href="READMEWhoAmI.html">TEG Quiz Who Am I</a> is available.</td>
+	</tr>
+	<tr>
+		<td id="whoAmIOptions">whoAmIOptions</td>
+		<td>Collection</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A collection of options to pass to TEG Quiz Who Am I. See <a href="READMEWhoAmI.html">the associated HTML file</a> for full documentation.</td>
+	</tr>
+	<tr>
+		<td id="resultsBeforeSubmit">resultsBeforeSubmit</td>
+		<td>Boolean</td>
+		<td><code class="prettyprint lang-javascript">true</code></td>
+		<td>Determines if results must be calculated and shown to the user before the form is submitted. If this is <code class="prettyprint lang-javascript">true</code> then the first submission will be halted and the results requested from the <a href="#Includes">Quiz Type Plugin</a>.</td>
+	</tr>
+	<tr>
+		<td id="resultSelector">resultSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'.results'</code></td>
+		<td>CSS selector of HTML element to display the results of the quiz.</td>
+	</tr>
+	<tr>
+		<td id="afterLoad">afterLoad</td>
+		<td>Function</td>
+		<td><pre class="prettyprint lang-javascript">function(Options) {
+
+ if (console) {
+  console.log('TEGQuiz.afterLoad\n' +
+              'Options = ' + Options + '\n');
+ }
+ return false;
+}</pre></td>
+		<td>CSS selector of HTML element to display the results of the quiz.</td>
+	</tr>
+	<tr>
+		<td id="submitQueue">submitQueue</td>
+		<td>Collection of Functions</td>
+		<td><pre class="prettyprint lang-javascript">{
+ '00500_quizHandler' :  function(event) {
+
+  if (console) {
+   console.warn('005_quizHandler not overridden as expected.');
+  } // end if console available
+  return true;
+ } // end ['005_quizHandler']()
+}</pre></td>
+		<td>A collection of functions to be run as the <code class="prettyprint lang-javascript">form.onSubmit</code> event handler. Each entry in the collection will be run in alphabetical order by key name. The <a href="#Includes">Quiz Type Plugins</a> will override the entry with the key word <code class="prettyprint lang-javascript">00500_quizHandler</code>.</td>
+	</tr>
+	<tr>
+		<td id="errorQueue">errorQueue</td>
+		<td>Collection of Functions</td>
+		<td><pre class="prettyprint lang-javascript">{
+ '00500_quizErrorHandler': function(event) {
+
+  if (console) {
+   console.warn('00500_quizErrorHandler not overridden as expected.');
+  } // end if console available
+  return true;
+ }
+}</pre></td>
+		<td>A collection of functions to be run if any of the <code class="prettyprint lang-javascript">form.onSubmit</code> event handlers returns false. Each entry in the collection will be run in alphabetical order by key name. The <a href="#Includes">Quiz Type Plugins</a> will override the entry with the key word <code class="prettyprint lang-javascript">00500_quizErrorHandler</code>.</td>
+	</tr>
+</table>
+</body>
+</html>

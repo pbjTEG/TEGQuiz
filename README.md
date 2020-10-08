@@ -21,10 +21,6 @@ Simulates identity and trivia quizzes on a CMS static page or data acquisition f
 
   Provides functionality for trivia quizzes
 
-## Installation
 
-Link the styles and JavaScript in the `<head>` element of the page. 
 
-```
-
-```
+For full documentation see the [HTML Version](README.html) of this file.
