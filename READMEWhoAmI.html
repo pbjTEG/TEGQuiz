@@ -1,63 +1,209 @@
-### TEG Quiz Who Am I?
+<!--
+  ~ Copyright (c) 2020. The Production Management Group, Ltd.
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>TEG Quiz Who Am I Plugin</title>
+	<meta charset="UTF-8" />
+	<meta name="keywords" content="javascript, library, quiz, who am I, trivia, clickbait, form" />
+	<meta name="description" content="Simulates identity and trivia quizzes on a CMS static page or data acquisition form. The library expects the form to be the usual assortment of radio buttons seen on social media and clickbait sites." />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style>
+		body {
+			background: white;
+			margin: 0 auto;
+			max-width: 60rem;
+		}
 
-Part of the [TEG Quiz](README.md) jQuery library. This plugin provides the functionality necessary for the TEG Quiz Library to run an identiy style quiz. 
+		td {
+			padding: 4pt;
+			vertical-align: top;
+		}
 
-## Requires
+		pre {
+			font-size: smaller;
+			max-width: 800px;
+			overflow: auto;
+		}
 
- * TEGQuiz.js
+		td > pre.prettyprint.lang-javascript.prettyprinted {
+			max-width: 20rem;
+			padding: .5rem;
+		}
 
-## Options
+		tr:nth-child(odd) {
+			background: lightgray;
+		}
 
-| Name | Type | Default | 
-		// keep a pointer to the questions passed form TEGQuiz
-		questions : [],
-		/* We need to collect the count of answers that match each
-		 * category and store the retult to show the user.
-		 */
-		categories: {
-			/* 'accumulator key 01' : {
-			 *    count: 0,
-			 *    win  : 'You are in the category for "Accumulator Key 01!"',
-			 * },
-			 * 'accumulator key 02' : {
-			 *    count: 0,
-			 *    win  : '<p>You are in the category for <strong>&ldquo;Accumulator Key 01!&rdquo;</strong>',
-			 * },
-			 */
-		},
-		/* TQWhoAmI will first try to use the HTML to determine what answers
-		 * are credited to what category. If you're using a CMS you might
-		 * not be able to control the value of the radio button or check
-		 * box.
-		 */
-		answers   : {
-			/*
-			 * 'selector01' : 'accumulator key 01',
-			 * 'selector02' : 'accumulator key 02',
-			 */
-		},
+		dt {
+			margin-top: 10pt;
+		}
+	</style>
+	<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+<h1>TEG Quiz &ldquo;Who Am I?&rdquo; Plugin</h1>
+<p>Part of the <a href="README.html">TEG Quiz Library</a>. This plugin provides the functionality necessary for the TEG Quiz Library to run an identity style quiz.</p>
+<h2 id="Requires">Requires</h2>
+<ul>
+	<li><a href="README.html">TEG Quiz Library</a></li>
+</ul>
+<h2 id="Properties">Properties</h2>
+<table>
+	<tr>
+		<th>
+			Property
+		</th>
+		<th>
+			Type
+		</th>
+		<th>
+			Default
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="optionsProperty">options</td>
+		<td>Collection</td>
+		<td>See <a href="#Options">Options</a> below.</td>
+		<td>A collection of options for configuring the quiz.</td>
+	</tr>
+</table>
+<h2 id="Methods">Methods</h2>
+<table>
+	<tr>
+		<th>
+			Method
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="getResults">getResults()</td>
+		<td>Counts the number of answers in each category and returns the winning entry from <a href="#categories"><code class="prettyprint lang-javascript">options.categories</code></a> below.</td>
+	</tr>
+</table>
+<h2 id="Options">Options</h2>
+<table>
+	<tr>
+		<th>
+			Option
+		</th>
+		<th>
+			Type
+		</th>
+		<th>
+			Default
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="questions">questions</td>
+		<td>jQuery Object</td>
+		<td><code class="prettyprint lang-javascript">[]</code></td>
+		<td>A jQuery object containing the quiz questions.</td>
+	</tr>
+	<tr>
+		<td id="categories">categories</td>
+		<td>Collection</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A collection of objects representing the categories to assign a survey taker. Each key name should match the <code class="prettyprint lang-html">value</code> attribute of the answers. The members of each entry must include a number value named <code class="prettyprint lang-javascript">count</code> and a string value named <code class="prettyprint lang-javascript">win</code>. The <code class="prettyprint lang-javascript">count</code> value will track the number of answers for that category. The <code class="prettyprint lang-javascript">win</code> value will be displayed to the user. See the <a href="README.html#resultSelector"><code class="prettyprint lang-javascript">resultSelector</code> option of TEG Query Library</a>.</td>
+	</tr>
+</table>
+<h3>Category Example</h3>
+<pre class="prettyprint lang-html">
+&lt;input type="radio" name="radioGroup" id="radio01" value="category01" /> &lt;label for="radio01">Category 01&lt;/label>
+&lt;input type="radio" name="radioGroup" id="radio02" value="category02" /> &lt;label for="radio01">Category 02&lt;/label>
+</pre>
+<pre class="prettyprint lang-javascript">{
+  'category01': {
+    count: 0,
+    win  : 'You are in "Category 01!"',
+  },
+  'category02': {
+    count: 0,
+    win  : 'You are in &lt;strong>&ldquo;Category 02!&rdquo;&lt;/strong>',
+  },
+}</pre>
+<table>
+	<tr>
+		<th>
+			Option
+		</th>
+		<th>
+			Type
+		</th>
+		<th>
+			Default
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="answers">answers</td>
+		<td>Collection</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A collection of CSS selectors and category assignments. If the form cannot be configured with a <code class="prettyprint lang-html">value</code> matching the keys in the <code class="prettyprint lang-javascript">categories</code> collection then the selectors in this collection will be used to assign each question to the proper category.</td>
+	</tr>
+</table>
+<h3>Answer Example</h3>
+<pre class="prettyprint lang-javascript">{
+  'CSS Selector 01': 'category01',
+  'CSS Selector 02': 'category02',
+}</pre>
 
-		// To be run at the end of the onSubmit handling process.
-		submitQueue: {
-			// override the default submit handler for all quiz types
-			'00500_quizHandler': function(event) {
+<table>
+	<tr>
+		<th>
+			Option
+		</th>
+		<th>
+			Type
+		</th>
+		<th>
+			Default
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="submitQueue">submitQueue</td>
+		<td>Collection of Functions</td>
+		<td><pre class="prettyprint lang-javascript">{
+  // override the default submit handler for all quiz types
+  '00500_quizHandler': function(event) {
 
-				if (console) {
-					console.warn('TQWhoAmI.options.submitQueue[\'00500_quizHandler\'] not overridden as expected.');
-				} // end if console available
-				return true;
-			} // end ['005_quizHandler']()
-		},
+    if (console) {
+      console.warn('TQWhoAmI.options.submitQueue[\'00500_quizHandler\'] not overridden as expected.');
+    } // end if console available
+    return true;
+  } // end ['00500_quizHandler']()
+}</pre></td>
+		<td>A collection of functions added to the <a href="README.html#submitQueue"><code class="prettyprint lang-javascript">submitQueue</code> option of TEG Query Library</a>.</td>
+	</tr>
+	<tr>
+		<td id="errorQueue">errorQueue</td>
+		<td>Collection of Functions</td>
+		<td><pre class="prettyprint lang-javascript">{
+  // override the default error handler for all quiz types
+  '00500_quizErrorHandler': function() {
 
-		// To be run if onSubmit fails
-		errorQueue: {
-			// override the default error handler for all quiz types
-			'00500_quizErrorHandler': function() {
-
-				if (console) {
-					console.warn('TQWhoAmI.options.errorQueue[\'00500_quizErrorHandler\'] not overridden as expected.');
-				} // end if console available
-				return true;
-			} // end ['00500_quizErrorHandler']()
-		}, // end errorQueue
-	}; // end TQWhoAmI.options
+    if (console) {
+      console.warn('TQWhoAmI.options.errorQueue[\'00500_quizErrorHandler\'] not overridden as expected.');
+    } // end if console available
+    return true;
+  } // end ['00500_quizErrorHandler']()
+}</pre></td>
+		<td>A collection of functions added to the <a href="README.html#errorQueue"><code class="prettyprint lang-javascript">errorQueue</code> option of TEG Query Library</a>.</td>
+	</tr>
+</table>
+</body>
+</html>

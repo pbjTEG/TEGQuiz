@@ -1,63 +1,9 @@
 ### TEG Quiz Who Am I?
 
-Part of the [TEG Quiz](README.md) jQuery library. This plugin provides the functionality necessary for the TEG Quiz Library to run an identiy style quiz. 
+Part of the [TEG Quiz](README.html) jQuery library. This plugin provides the functionality necessary for the TEG Quiz Library to run an identity style quiz.
 
 ## Requires
 
  * TEGQuiz.js
 
-## Options
-
-| Name | Type | Default | 
-		// keep a pointer to the questions passed form TEGQuiz
-		questions : [],
-		/* We need to collect the count of answers that match each
-		 * category and store the retult to show the user.
-		 */
-		categories: {
-			/* 'accumulator key 01' : {
-			 *    count: 0,
-			 *    win  : 'You are in the category for "Accumulator Key 01!"',
-			 * },
-			 * 'accumulator key 02' : {
-			 *    count: 0,
-			 *    win  : '<p>You are in the category for <strong>&ldquo;Accumulator Key 01!&rdquo;</strong>',
-			 * },
-			 */
-		},
-		/* TQWhoAmI will first try to use the HTML to determine what answers
-		 * are credited to what category. If you're using a CMS you might
-		 * not be able to control the value of the radio button or check
-		 * box.
-		 */
-		answers   : {
-			/*
-			 * 'selector01' : 'accumulator key 01',
-			 * 'selector02' : 'accumulator key 02',
-			 */
-		},
-
-		// To be run at the end of the onSubmit handling process.
-		submitQueue: {
-			// override the default submit handler for all quiz types
-			'00500_quizHandler': function(event) {
-
-				if (console) {
-					console.warn('TQWhoAmI.options.submitQueue[\'00500_quizHandler\'] not overridden as expected.');
-				} // end if console available
-				return true;
-			} // end ['005_quizHandler']()
-		},
-
-		// To be run if onSubmit fails
-		errorQueue: {
-			// override the default error handler for all quiz types
-			'00500_quizErrorHandler': function() {
-
-				if (console) {
-					console.warn('TQWhoAmI.options.errorQueue[\'00500_quizErrorHandler\'] not overridden as expected.');
-				} // end if console available
-				return true;
-			} // end ['00500_quizErrorHandler']()
-		}, // end errorQueue
-	}; // end TQWhoAmI.options
+For full documentation see [READMEWhoAmI.html](READMEWhoAmI.html).
