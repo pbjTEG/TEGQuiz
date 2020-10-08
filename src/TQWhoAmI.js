@@ -42,17 +42,29 @@ function TQWhoAmI(Options) {
 			 */
 		},
 
-		// To be run at the end of hte onSubmit handling process.
-		submitQue: {
+		// To be run at the end of the onSubmit handling process.
+		submitQueue: {
 			// override the default submit handler for all quiz types
 			'00500_quizHandler': function(event) {
 
 				if (console) {
-					console.warn("TQWhoAmI.options.submitQue['005_quizHandler'] not overridden as expected.");
+					console.warn('TQWhoAmI.options.submitQueue[\'00500_quizHandler\'] not overridden as expected.');
 				} // end if console available
 				return true;
 			} // end ['005_quizHandler']()
 		},
+
+		// To be run if onSubmit fails
+		errorQueue: {
+			// override the default error handler for all quiz types
+			'00500_quizErrorHandler': function() {
+
+				if (console) {
+					console.warn('TQWhoAmI.options.errorQueue[\'00500_quizErrorHandler\'] not overridden as expected.');
+				} // end if console available
+				return true;
+			} // end ['00500_quizErrorHandler']()
+		}, // end errorQueue
 	}; // end TQWhoAmI.options
 	jQuery.extend(TQWhoAmI.options, Options);
 
@@ -110,10 +122,26 @@ function TQWhoAmI(Options) {
 				        if (TQWhoAmI.options.categories[TQWhoAmI.options.questions.eq(index).prop('TQW_category')].count >
 				            highest.count)
 				        {
-								highest = TQWhoAmI.options.categories[TQWhoAmI.options.questions.eq(index).prop('TQW_category')];
+					        highest = TQWhoAmI.options.categories[TQWhoAmI.options.questions.eq(index).prop('TQW_category')];
 				        }
 			        } // end if selected
 		        });
+
+		if (console) {
+			console.log('getResults categories');
+
+			for (var key in TQWhoAmI.options.categories) {
+
+				var value = TQWhoAmI.options.categories[key];
+				console.log('  ' + key + ' = ' + value);
+
+				for (var key2 in value) {
+
+					var value2 = value[key2];
+					console.log('    ' + key2 + ' = ' + value2);
+				} // end loop through second level items
+			} // end loop through first level items
+		} // end if console available
 		return highest.win;
 	}; // end getResults(
 
