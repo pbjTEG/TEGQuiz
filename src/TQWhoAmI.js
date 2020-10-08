@@ -17,7 +17,7 @@ function TQWhoAmI(Options) {
 		// keep a pointer to the questions passed form TEGQuiz
 		questions : [],
 		/* We need to collect the count of answers that match each
-		 * category and store the retult to show the user.
+		 * category and store the result to show the user.
 		 */
 		categories: {
 			/* 'accumulator key 01' : {
@@ -143,6 +143,6 @@ function TQWhoAmI(Options) {
 			} // end loop through first level items
 		} // end if console available
 		return highest.win;
-	}; // end getResults(
+	}; // end getResults()
 
 } // end TQWhoAmI()
