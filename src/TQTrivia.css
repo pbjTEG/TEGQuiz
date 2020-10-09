@@ -1,0 +1,46 @@
+/* These styles just illustrate what the library does.
+ * You really want to override or edit all of these.
+ */
+
+* {
+	-webkit-transition: all 2s ease-in;
+	-moz-transition: all 2s ease-in;
+	-o-transition: all 2s ease-in;
+	-ms-transition: all 2s ease-in;
+	transition: all 2s ease-in;
+}
+
+.explanation {
+	background: rgba(0, 0, 0, .6);
+	border: 2px solid gray;
+	bottom: 0;
+	display: none;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 9999;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.show {
+	animation: fadeIn 2s;
+	display: block;
+}
+
+.correct,
+.answered.correct {
+	background: cornflowerblue;
+}
+
+.answered {
+	background: darkseagreen;
+}

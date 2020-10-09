@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TEG Quiz Static Form Example Who Am I</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="lib/TEGFakePages.min.css" type="text/css" />
+	<link rel="stylesheet" href="../src/TEGQuiz.css" type="text/css" />
+	<link rel="stylesheet" href="../src/TQTrivia.css" type="text/css" />
+	<style>
+		form {
+			display: none;
+		}
+	</style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap-grid.min.css" type="text/css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
+	<script src="lib/TEGUtilities.2.min.js" type="text/javascript"></script>
+	<script src="lib/TEGFakePages.min.js" type="text/javascript"></script>
+	<script src="../src/TEGQuiz.js" type="text/javascript"></script>
+	<script src="../src/TQTrivia.js" type="text/javascript"></script>
+	<script>
+		jQuery(document).ready(function() {
+			window.TEGForm = new TEGQuiz({
+				                             paginationOptions: {
+					                             pageItemParentSelector: '',
+				                             },
+				                             quizOptions    : {
+					                             answers: {
+						                             '[name="favoriteColor"]'                                                                                : {
+							                             correctValues: ['blue'],
+							                             explanation  : 'Blue is common as dirt in every new design.',
+						                             },
+						                             '[name="favoriteNumber"]'                                                                               : {
+							                             correctValues: ['11'],
+							                             explanation  : 'Eleven is good.'
+						                             },
+						                             '[name="favoriteLetterA"], [name="favoriteLetterB"], [name="favoriteLetterC"], [name="favoriteLetterD"]': {
+							                             correctValues: ['B', 'C'],
+							                             explanation  : 'The letter &ldquo;B&rdquo; is obviously the best but we&rsquo;ll take &ldquo;C&rdquo; as well.'
+						                             },
+						                             '#select01'                                                                                             : {
+							                             correctValues: ['3'],
+							                             explanation  : 'Seriously, it&rsquo;s always Summer.',
+						                             },
+					                             }, // end answers
+				                             }, // end whoAmIOptions
+			                             });
+			// any additional stuff goes here
+		}); // end jQuery(document).ready
+	</script>
+</head>
+<body>
+<form action="Confirmation.html" method="get">
+	<h1>Trivia</h1>
+	<div class="explanation"></div>
+	<h2 class="step">First Question</h2>
+	<fieldset id="favoriteColor">
+		<legend>What&rsquo;s the best color?</legend>
+		<input type="radio" id="radio101" value="red" name="favoriteColor" /> <label for="radio101">Red</label><br />
+		<input type="radio" id="radio102" value="yellow" name="favoriteColor" /> <label for="radio102">Yellow</label><br />
+		<input type="radio" id="radio103" value="blue" name="favoriteColor" /> <label for="radio103">Blue</label><br />
+		<input type="radio" id="radio104" value="green" name="favoriteColor" /> <label for="radio104">Green</label>
+	</fieldset>
+	<h2 class="step">Second Question</h2>
+	<fieldset id="favoriteNumber">
+		<legend>Select the best numbers&hellip;</legend>
+		<!-- checkbox group -->
+		<input type="checkbox" id="checkbox201" value="1" name="favoriteNumber" /> <label for="checkbox201">One</label><br />
+		<input type="checkbox" id="checkbox202" value="11" name="favoriteNumber" /> <label for="checkbox202">Eleven</label><br />
+		<input type="checkbox" id="checkbox203" value="111" name="favoriteNumber" /> <label for="checkbox203">One Hundred Eleven</label><br />
+		<input type="checkbox" id="checkbox204" value="1111" name="favoriteNumber" /> <label for="checkbox204">One Thousand One Hundred and Eleven</label><br />
+	</fieldset>
+	<p>&hellip;and letters.</p>
+	<!-- ungrouped checkboxes -->
+	<input type="checkbox" id="checkbox205" value="A" name="favoriteLetterA" /> <label for="checkbox205">A</label><br />
+	<input type="checkbox" id="checkbox206" value="B" name="favoriteLetterB" /> <label for="checkbox206">B</label><br />
+	<input type="checkbox" id="checkbox207" value="C" name="favoriteLetterC" /> <label for="checkbox207">C</label><br />
+	<input type="checkbox" id="checkbox208" value="D" name="favoriteLetterD" /> <label for="checkbox208">D</label>
+	<div class="step-exclude">This is content inserted between the second and third question which is exclude from pagination.</div>
+	<h2 class="step">Third Question</h2>
+	<label for="select01">What&rsquo;s your favorite season?</label>
+	<select id="select01" name="favoriteSeason">
+		<option value="0">Winter</option>
+		<option value="1">Spring</option>
+		<option value="2">Summer</option>
+		<option value="3">Fall</option>
+	</select>
+	<h2 class="step" data-breadcrumb="User Info">Enter Your Email to Get Your Results</h2>
+	<fieldset id="contactInfo">
+		<label for="firstName">First Name</label><br />
+		<input type="text" id="firstName" name="first_name" value="" required="required" /><br />
+		<label for="lastName">Last Name</label><br />
+		<input type="text" id="lastName" name="last_name" value="" required="required" /><br />
+		<label for="email">Email</label><br />
+		<input type="email" id="email" name="email" value="" required="required" />
+	</fieldset>
+	<h2 class="step">Results</h2>
+	<p class="results"></p>
+	<input type="submit" value="Submit Survey" />
+</form>
+</body>
+</html>

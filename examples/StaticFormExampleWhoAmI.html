@@ -11,7 +11,6 @@
 			display: none;
 		}
 	</style>
-
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap-grid.min.css" type="text/css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
 	<script src="lib/TEGUtilities.2.min.js" type="text/javascript"></script>
@@ -21,10 +20,10 @@
 	<script>
 		jQuery(document).ready(function() {
 			window.TEGForm = new TEGQuiz({
-				                             paginationOptions      : {
+				                             paginationOptions: {
 					                             pageItemParentSelector: '',
 				                             },
-				                             whoAmIOptions          : {
+				                             quiz             : {
 					                             categories: {
 						                             'category01': {
 							                             count: 0,
@@ -54,11 +53,9 @@
 			// any additional stuff goes here
 		}); // end jQuery(document).ready
 	</script>
-	<link rel="stylesheet" href="../src/TEGQuiz.css">
 </head>
 <body>
 <form action="Confirmation.html" method="get">
-	<input type="hidden" name="TQ_results" value="" />
 	<h1>What Am I?</h1>
 	<h2 class="step">First Question</h2>
 	<fieldset id="favoriteColor">

@@ -66,13 +66,14 @@ function TEGQuiz(Options) {
 
 		// trivia quiz
 		useTrivia    : typeof TQTrivia === 'function',
-		triviaOptions: {}, // use defaults unless overwritten by configuration
 
-		//  identity quiz
+		// identity quiz
 		useWhoAmI    : typeof TQWhoAmI === 'function',
-		whoAmIOptions: {}, // use defaults unless overwritten by configuration
+		
+		// options to configure the quiz processor
+		quizOptions: {}, // use defaults unless overwritten by configuration
 
-		// quiz restuls
+		// quiz results
 		resultsBeforeSubmit: true, // show the quiz results before submitting form
 		resultSelector     : '.results', // CSS selector for result value to pass to the confirmation page
 
@@ -377,7 +378,7 @@ function TEGQuiz(Options) {
 				// if trivia quiz
 				if (TEGQuiz.options.useTrivia) {
 					TEGQuiz.quiz = new TQTrivia(
-						jQuery.extend(TEGQuiz.options.triviaOptions,
+						jQuery.extend(TEGQuiz.options.quizOptions,
 						              {questions: TEGQuiz.questions})
 					);
 
@@ -386,7 +387,7 @@ function TEGQuiz(Options) {
 					// if identity quiz
 					if (TEGQuiz.options.useWhoAmI) {
 						TEGQuiz.quiz = new TQWhoAmI(
-							jQuery.extend(TEGQuiz.options.whoAmIOptions,
+							jQuery.extend(TEGQuiz.options.quizOptions,
 							              {questions: TEGQuiz.questions})
 						);
 					} // end if identity type
