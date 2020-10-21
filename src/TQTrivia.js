@@ -36,8 +36,8 @@ function TQTrivia(Options) {
 		 * uniquely identifies
 		 */
 		answers: {
-			'[name="radioGroup01"]': ['Correct Value 01'],
-			'[name="radioGroup02"]': ['Correct Value 02'],
+			'CSS Selector 01': ['answer 1', 'answer 2'],
+			'CSS Selector 02': ['this answer'],
 		}, // end answers collection
 
 		// Show the correct answer after each question
@@ -80,10 +80,10 @@ function TQTrivia(Options) {
 
 			TQTrivia.questionAnsweredDisplay.text(TQTrivia.countAnswers);
 			TQTrivia.questionCorrectDisplay.text(TQTrivia.countCorrect);
-			thisQuestion.closest('.step-item')
+			thisQuestion.closest(TQTrivia.options.questionContainerSelector)
 			            .find(TQTrivia.options.nextButtonSelector)
 			            .addClass(TQTrivia.options.explanationShowClass);
-			thisQuestion.closest('.step-item')
+			thisQuestion.closest(TQTrivia.options.questionContainerSelector)
 			            .find(TQTrivia.options.explanationSelector)
 			            .addClass(TQTrivia.options.explanationShowClass);
 		}, // end showAnswer()

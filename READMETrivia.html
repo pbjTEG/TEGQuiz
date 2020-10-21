@@ -1,3 +1,306 @@
-### TEG Quiz Trivia
+<!--
+  ~ Copyright (c) 2020. The Production Management Group, Ltd.
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>TEG Quiz TRivia</title>
+	<meta charset="UTF-8" />
+	<meta name="keywords" content="javascript, library, quiz, who am I, trivia, clickbait, form" />
+	<meta name="description" content="Part of the TEG Quiz jQuery library. This plugin provides the functionality necessary for the TEG Quiz Library to run a trivia quiz." />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style>
+		body {
+			background: white;
+			margin: 0 auto;
+			max-width: 60rem;
+		}
 
-Part of the [TEG Quiz](README.md) jQuery library.
+		td {
+			padding: 4pt;
+			vertical-align: top;
+		}
+
+		pre {
+			font-size: smaller;
+			max-width: 800px;
+			overflow: auto;
+		}
+
+		td > pre.prettyprint.lang-javascript.prettyprinted {
+			max-width: 20rem;
+			padding: .5rem;
+		}
+
+		tr:nth-child(odd) {
+			background: lightgray;
+		}
+
+		dt {
+			margin-top: 10pt;
+		}
+	</style>
+	<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+<h1>TEG Quiz Trivia Plugin</h1>
+<p>Part of the <a href="README.html">TEG Quiz Library</a>. This plugin provides the functionality necessary for the TEG Quiz Library to run a trivia quiz.</p>
+<h2 id="Requires">Requires</h2>
+<ul>
+	<li><a href="README.html">TEG Quiz Library</a></li>
+	<li><a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a></li>
+</ul>
+<h2 id="Properties">Properties</h2>
+<table>
+	<tr>
+		<th>
+			Property
+		</th>
+		<th>
+			Type
+		</th>
+		<th>
+			Default
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="optionsProperty">options</td>
+		<td>Collection</td>
+		<td>See <a href="#Options">Options</a> below.</td>
+		<td>A collection of options for configuring the quiz.</td>
+	</tr>
+	<tr>
+		<td id="countViewed">countViewed</td>
+		<td>Integer</td>
+		<td><code class="prettyprint lang-javascript">0</code></td>
+		<td>A running count of questions viewed by the user.</td>
+	</tr>
+	<tr>
+		<td id="countAnswers">countAnswers</td>
+		<td>Integer</td>
+		<td><code class="prettyprint lang-javascript">0</code></td>
+		<td>A running count of answers provided by the user.</td>
+	</tr>
+	<tr>
+		<td id="countCorrect">countCorrect</td>
+		<td>Integer</td>
+		<td><code class="prettyprint lang-javascript">0</code></td>
+		<td>A running count of correct answers provided by the user.</td>
+	</tr>
+	<tr>
+		<td id="countQuestions">countQuestions</td>
+		<td>Integer</td>
+		<td><code class="prettyprint lang-javascript">0</code></td>
+		<td>The total number of trivia questions in the quiz.</td>
+	</tr>
+	<tr>
+		<td id="questionCountDisplay">questionCountDisplay</td>
+		<td>jQuery Object</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A jQuery object for the HTML element which displays the total number of questions to the user. See <a href="#questionCountSelector"><code class="prettyprint lang-javascript">questionCountSelector</code></a> below.</td>
+	</tr>
+	<tr>
+		<td id="questionViewedDisplay">questionViewedDisplay</td>
+		<td>jQuery Object</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A jQuery object for the HTML element which displays a running count of questions viewed by the user. See <a href="#questionViewedSelector"><code class="prettyprint lang-javascript">questionViewedSelector</code></a> below.</td>
+	</tr>
+	<tr>
+		<td id="questionAnsweredDisplay">questionAnsweredDisplay</td>
+		<td>jQuery Object</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A jQuery object for the HTML element which displays a running count of questions answered by the user. See <a href="#questionAnsweredSelector"><code class="prettyprint lang-javascript">questionAnsweredSelector</code></a> below.</td>
+	</tr>
+	<tr>
+		<td id="questionCorrectDisplay">questionCorrectDisplay</td>
+		<td>jQuery Object</td>
+		<td><code class="prettyprint lang-javascript">{}</code></td>
+		<td>A jQuery object for the HTML element which displays a running count of questions correctly answered by the user. See <a href="#questionCorrectSelector"><code class="prettyprint lang-javascript">questionCorrectSelector</code></a> below.</td>
+	</tr>
+</table>
+<!--
+
+ -->
+<h2 id="Methods">Methods</h2>
+<table>
+	<tr>
+		<th>
+			Method
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="getResults">getResults()</td>
+		<td>Counts the number of correct answers and returns the results content from <a href="#results"><code class="prettyprint lang-javascript">options.results</code></a> collection after updating it with the question counts using the CSS selectors in <a href="#questionViewedSelector"><code class="prettyprint lang-javascript">question*Selector</code></a> below.</td>
+	</tr>
+	<tr>
+		<td id="showAnswer">options.showAnswer()</td>
+		<td>A function fired after each question is answered. This is in <a href="#options.showAnswer"><code class="prettyprint lang-javascript">options.showAnswer()</code></a> below for easy overriding.</td>
+	</tr>
+</table>
+<h2 id="Options">Options</h2>
+<table>
+	<tr>
+		<th>
+			Option
+		</th>
+		<th>
+			Type
+		</th>
+		<th>
+			Default
+		</th>
+		<th>
+			Description
+		</th>
+	</tr>
+	<tr>
+		<td id="questions">questions</td>
+		<td>jQuery Object</td>
+		<td><code class="prettyprint lang-javascript">[]</code></td>
+		<td>A jQuery object containing the quiz questions.</td>
+	</tr>
+	<tr>
+		<td id="correctClass">correctClass</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'correct'</code></td>
+		<td>A CSS class name to be applied to the label for the correct answers.</td>
+	</tr>
+	<tr>
+		<td id="answeredClass">answeredClass</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'answered'</code></td>
+		<td>A CSS class name to be applied to the label for the selected answers.</td>
+	</tr>
+	<tr>
+		<td id="explanationShowClass">explanationShowClass</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'show'</code></td>
+		<td>A CSS class name to be applied to the content located by <a href="#explanationSelector"><code class="prettyprint lang-javascript">explanationSelector</code></a> and the navigation buttons generated by <a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a>.</td>
+	</tr>
+	<tr>
+		<td id="questionCountSelector">questionCountSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'.totalQuestions'</code></td>
+		<td>A CSS selector to locate <a href="#questionCountDisplay"><code class="prettyprint lang-javascript">questionCountDisplay</code></a> above.</td>
+	</tr>
+	<tr>
+		<td id="questionAnsweredSelector">questionAnsweredSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'.answeredQuestions'</code></td>
+		<td>A CSS selector to locate <a href="#questionAnsweredDisplay"><code class="prettyprint lang-javascript">questionAnsweredDisplay</code></a> above.</td>
+	</tr>
+	<tr>
+		<td id="questionViewedSelector">questionViewedSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'.viewedQuestions'</code></td>
+		<td>A CSS selector to locate <a href="#questionViewedDisplay"><code class="prettyprint lang-javascript">questionViewedDisplay</code></a> above.</td>
+	</tr>
+	<tr>
+		<td id="questionCorrectSelector">questionCorrectSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'.correctQuestions'</code></td>
+		<td>A CSS selector to locate <a href="#questionCorrectDisplay"><code class="prettyprint lang-javascript">questionCorrectDisplay</code></a> above.</td>
+	</tr>
+	<tr>
+		<td id="questionContainerSelector">questionContainerSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'.step-item'</code></td>
+		<td>A CSS selector to locate the parent element generated by <a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a> for the currently displayed question. The default matches the default value for this selector in <a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a>.</td>
+	</tr>
+	<tr>
+		<td id="explanationSelector">explanationSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'.explanation'</code></td>
+		<td>A CSS selector to locate the explanation content for the currently displayed question.</td>
+	</tr>
+	<tr>
+		<td id="nextButtonSelector">nextButtonSelector</td>
+		<td>String</td>
+		<td><code class="prettyprint lang-javascript">'.step-next'</code></td>
+		<td>A CSS selector to locate the navigation for the currently displayed question.</td>
+	</tr>
+	<tr>
+		<td id="answers">answers</td>
+		<td>Collection</td>
+		<td><pre class="prettyprint lang-javascript">{
+  'CSS Selector 01': ['answer 1', 'answer 2'],
+  'CSS Selector 02': ['this answer'],
+}</pre></td>
+		<td>A collection of CSS selectors and arrays of correct values. The key must be a CSS selector that matches all the form fields (radio buttons, mostly) that make up a trivia question. The value is an array of strings containing all the correct answers. Most of the time there will be only one entry but this structure allows for a group a checkboxes or a multi-select dropdown.</td>
+	</tr>
+	<tr>
+		<td id="options.showAnswer">showAnswer()</td>
+		<td>Function</td>
+		<td>Way too long to list here.</td>
+		<td>Fired after the user answers a question, this function disables the group of form fields, highlights the selected answer with <a href="#answeredClass"><code class="prettyprint lang-javascript">answeredClass</code></a>, highlights the correct answer(s) with <a href="#correctClass"><code class="prettyprint lang-javascript">correctClass</code></a>, displays the content found by <a href="#explanationSelector"><code class="prettyprint lang-javascript">explanationSelector</code></a> by applying the class name in the content found by <a href="#explanationShowClass"><code class="prettyprint lang-javascript">explanationShowClass</code></a>.</td>
+	</tr>
+	<tr>
+		<td id="submitQueue">submitQueue</td>
+		<td>Collection of Functions</td>
+		<td><pre class="prettyprint lang-javascript">{
+  // override the default submit handler for all quiz types
+  '00500_quizHandler': function(event) {
+
+    if (console) {
+      console.warn('TQWhoAmI.options.submitQueue[\'00500_quizHandler\'] not overridden as expected.');
+    } // end if console available
+    return true;
+  } // end ['00500_quizHandler']()
+}</pre></td>
+		<td>A collection of functions added to the <a href="README.html#submitQueue"><code class="prettyprint lang-javascript">submitQueue</code> option of TEG Query Library</a>.</td>
+	</tr>
+	<tr>
+		<td id="errorQueue">errorQueue</td>
+		<td>Collection of Functions</td>
+		<td><pre class="prettyprint lang-javascript">{
+  // override the default error handler for all quiz types
+  '00500_quizErrorHandler': function() {
+
+    if (console) {
+      console.warn('TQWhoAmI.options.errorQueue[\'00500_quizErrorHandler\'] not overridden as expected.');
+    } // end if console available
+    return true;
+  } // end ['00500_quizErrorHandler']()
+}</pre></td>
+		<td>A collection of functions added to the <a href="README.html#errorQueue"><code class="prettyprint lang-javascript">errorQueue</code> option of TEG Query Library</a>.</td>
+	</tr>
+	<tr>
+		<td id="afterAnswer">afterAnswer</td>
+		<td>Collection of Functions</td>
+		<td><pre class="prettyprint lang-javascript">{
+  // run after every question
+  '*': function(event) {
+    TQTrivia.options.showAnswer(event);
+    return true;
+  } // end everyTime()
+}</pre></td>
+		<td>A collection of functions added to the <a href="README.html#afterAnswer"><code class="prettyprint lang-javascript">afterAnswer</code> option of TEG Query Library</a>. The default entry runs <a href="#options.showAnswer">options.showAnsewr()</a> above.</td>
+	</tr>
+	<tr>
+		<td id="results">results</td>
+		<td>Collection of Strings</td>
+<td><pre class="prettyprint lang-javascript">{
+  100:
+    '&lt;h3>Perfect Score!&lt;/h3>&lt;p>You got everything right. ' +
+    'That&rsquo;s &lt;span class="correctQuestions">&lt;/span> ' +
+    'out of &lt;span class="totalQuestions">&lt;/span>.&lt;/p>',
+  90 :
+    '&lt;h3>Excellent!&lt;/h3>&lt;p>You got most questions right. ' +
+    'That&rsquo;s &lt;span class="correctQuestions">&lt;/span> ' +
+    'out of &lt;span class="totalQuestions">&lt;/span>.&lt;/p>',
+  50 :
+    '&lt;h3>Were you even paying attention?&lt;/h3>&lt;p>You got most questions wrong. ' +
+    'That&rsquo;s only &lt;span class="correctQuestions">&lt;/span> ' +
+    'out of &lt;span class="totalQuestions">&lt;/span>.&lt;/p>',
+}</pre></td>
+		<td>A collection of strings containing the content to show to the user. Each key is an integer value indicating the percentage of correct questions for which the HTML will be displayed. See <a href="README.html#resultSelector">TEG Quiz options.resultSelector</a>.</td>
+	</tr>
+</table>
+</body>
+</html>
