@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>TEG Quiz Static Form Example Who Am I</title>
+	<title>TEG Quiz Static Form Example Trivia</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="lib/TEGFakePages.min.css" type="text/css" />
 	<link rel="stylesheet" href="../src/TEGQuiz.css" type="text/css" />
 	<link rel="stylesheet" href="../src/TQTrivia.css" type="text/css" />
 	<style>
+		/* hide the form until we're done juggling */
 		form {
 			display: none;
 		}
@@ -21,38 +22,30 @@
 	<script>
 		jQuery(document).ready(function() {
 			window.TEGForm = new TEGQuiz({
+				                             formSelector     : '#triviaQuiz',
 				                             paginationOptions: {
+					                             // don't allow intra-quiz navigation
+					                             breadcrumbs           : [],
+					                             backButton            : jQuery(''),
 					                             pageItemParentSelector: '',
 				                             },
-				                             quizOptions    : {
+				                             newQuiz          : TQTrivia,
+				                             quizOptions      : {
 					                             answers: {
-						                             '[name="favoriteColor"]'                                                                                : {
-							                             correctValues: ['blue'],
-							                             explanation  : 'Blue is common as dirt in every new design.',
-						                             },
-						                             '[name="favoriteNumber"]'                                                                               : {
-							                             correctValues: ['11'],
-							                             explanation  : 'Eleven is good.'
-						                             },
-						                             '[name="favoriteLetterA"], [name="favoriteLetterB"], [name="favoriteLetterC"], [name="favoriteLetterD"]': {
-							                             correctValues: ['B', 'C'],
-							                             explanation  : 'The letter &ldquo;B&rdquo; is obviously the best but we&rsquo;ll take &ldquo;C&rdquo; as well.'
-						                             },
-						                             '#select01'                                                                                             : {
-							                             correctValues: ['3'],
-							                             explanation  : 'Seriously, it&rsquo;s always Summer.',
-						                             },
+						                             '[name="favoriteColor"]' : ['blue'],
+						                             '[name="favoriteNumber"]': ['11', '111'],
+						                             '#select01'              : ['2'],
 					                             }, // end answers
-				                             }, // end whoAmIOptions
-			                             });
+				                             }, // end quiz options
+			                             }); // end new TEGQuiz()
 			// any additional stuff goes here
 		}); // end jQuery(document).ready
 	</script>
 </head>
 <body>
-<form action="Confirmation.html" method="get">
+<section id="triviaQuiz">
 	<h1>Trivia</h1>
-	<div class="explanation"></div>
+	<p class="step-exclude">Question <span class="viewedQuestions">1</span> of <span class="totalQuestions">¿?</span>. <span class="correctQuestions">¿?</span> correct so far.</p>
 	<h2 class="step">First Question</h2>
 	<fieldset id="favoriteColor">
 		<legend>What&rsquo;s the best color?</legend>
@@ -61,42 +54,35 @@
 		<input type="radio" id="radio103" value="blue" name="favoriteColor" /> <label for="radio103">Blue</label><br />
 		<input type="radio" id="radio104" value="green" name="favoriteColor" /> <label for="radio104">Green</label>
 	</fieldset>
+	<div class="explanation">
+		<p>Blue is common as dirt in every new design.</p>
+	</div>
 	<h2 class="step">Second Question</h2>
 	<fieldset id="favoriteNumber">
 		<legend>Select the best numbers&hellip;</legend>
 		<!-- checkbox group -->
-		<input type="checkbox" id="checkbox201" value="1" name="favoriteNumber" /> <label for="checkbox201">One</label><br />
-		<input type="checkbox" id="checkbox202" value="11" name="favoriteNumber" /> <label for="checkbox202">Eleven</label><br />
-		<input type="checkbox" id="checkbox203" value="111" name="favoriteNumber" /> <label for="checkbox203">One Hundred Eleven</label><br />
-		<input type="checkbox" id="checkbox204" value="1111" name="favoriteNumber" /> <label for="checkbox204">One Thousand One Hundred and Eleven</label><br />
+		<input type="radio" id="radio201" value="1" name="favoriteNumber" /> <label for="radio201">One</label><br />
+		<input type="radio" id="radio202" value="11" name="favoriteNumber" /> <label for="radio202">Eleven</label><br />
+		<input type="radio" id="radio203" value="111" name="favoriteNumber" /> <label for="radio203">One Hundred Eleven</label><br />
+		<input type="radio" id="radio204" value="1111" name="favoriteNumber" /> <label for="radio204">One Thousand One Hundred and Eleven</label>
 	</fieldset>
-	<p>&hellip;and letters.</p>
-	<!-- ungrouped checkboxes -->
-	<input type="checkbox" id="checkbox205" value="A" name="favoriteLetterA" /> <label for="checkbox205">A</label><br />
-	<input type="checkbox" id="checkbox206" value="B" name="favoriteLetterB" /> <label for="checkbox206">B</label><br />
-	<input type="checkbox" id="checkbox207" value="C" name="favoriteLetterC" /> <label for="checkbox207">C</label><br />
-	<input type="checkbox" id="checkbox208" value="D" name="favoriteLetterD" /> <label for="checkbox208">D</label>
-	<div class="step-exclude">This is content inserted between the second and third question which is exclude from pagination.</div>
+	<div class="explanation">
+		<p>Eleven is good. One hundred and eleven is also good.</p>
+	</div>
 	<h2 class="step">Third Question</h2>
 	<label for="select01">What&rsquo;s your favorite season?</label>
 	<select id="select01" name="favoriteSeason">
+		<option value=""></option>
 		<option value="0">Winter</option>
 		<option value="1">Spring</option>
 		<option value="2">Summer</option>
 		<option value="3">Fall</option>
 	</select>
-	<h2 class="step" data-breadcrumb="User Info">Enter Your Email to Get Your Results</h2>
-	<fieldset id="contactInfo">
-		<label for="firstName">First Name</label><br />
-		<input type="text" id="firstName" name="first_name" value="" required="required" /><br />
-		<label for="lastName">Last Name</label><br />
-		<input type="text" id="lastName" name="last_name" value="" required="required" /><br />
-		<label for="email">Email</label><br />
-		<input type="email" id="email" name="email" value="" required="required" />
-	</fieldset>
+	<div class="explanation">
+		<p>Seriously, it&rsquo;s always Summer.</p>
+	</div>
 	<h2 class="step">Results</h2>
 	<p class="results"></p>
-	<input type="submit" value="Submit Survey" />
-</form>
+</section>
 </body>
 </html>
