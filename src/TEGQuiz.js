@@ -6,6 +6,10 @@
  *
  * The Engage Group <engage@engageyourcause.com>
  */
+
+//TODO Collect labels at startup for faster access later.
+//TODO Generate missing ID and FOR attributes.
+
 function TEGQuiz(Options) {
 	var TEGQuiz = this;
 	// constants
@@ -17,6 +21,11 @@ function TEGQuiz(Options) {
 
 		/* Collect information about the quiz questions so
 		 * we can track answers and count them.
+		 *
+		 * A quiz form should include only fixed-value fields such as
+		 * radio buttons, checkboxes, and single answer select lists.
+		 * But we need room for future expansion and for per-client or
+		 * per-form customization.
 		 */
 		questionSelector       : 'input[type="checkbox"], input[type="number"], ' +
 		                         'input[type="radio"], input[type="range"], select', // collect the HTML elements which match this selector
@@ -29,7 +38,7 @@ function TEGQuiz(Options) {
 		answerHighlightClass: 'selected',
 
 		/* Add collections of custom functions to run after a question is
-		 * answered. These will be run as onClick event handlers.
+		 * answered. These will be run as onChange event handlers.
 		 */
 		afterAnswer: {
 			// runs after every question
@@ -42,11 +51,11 @@ function TEGQuiz(Options) {
 			},
 			/* Example Function for a Specific Question
 			 *
-			 * The key value for each entry must match the ID of the
-			 * answer label for which it is to run. The function
-			 * will receive the event that fired the onClick
-			 * handler.
-			 * 'questionID': function(event) {
+			 * The key value for each entry be a valid CSS selector
+			 * for the question answered. The function will receive
+			 * the event that fired the onchange handler.
+			 *
+			 * '#questionID': function(event) {
 			 *
 			 *    if (console) {
 			 *      console.log('afterAnswer.questionID\n' +
@@ -64,12 +73,15 @@ function TEGQuiz(Options) {
 		usePagination    : typeof TEGFakePages === 'function',
 		paginationOptions: {}, // use defaults unless overwritten by configuration
 
-		// trivia quiz
-		useTrivia    : typeof TQTrivia === 'function',
+		// the quiz type plugin goes here
+		newQuiz: function() {
+			// placeholder does nothing
+			this.options = {
+				submitQueue: {},
+				errorQueue : {},
+			};
+		},
 
-		// identity quiz
-		useWhoAmI    : typeof TQWhoAmI === 'function',
-		
 		// options to configure the quiz processor
 		quizOptions: {}, // use defaults unless overwritten by configuration
 
@@ -125,6 +137,28 @@ function TEGQuiz(Options) {
 		jQuery.extend(TEGQuiz.options, TEGCustomQuiz);
 	}
 
+	// load the quiz type plugin
+	// if there's no quiz type plugin, log an error and quit
+	if (typeof TEGQuiz.options.newQuiz !== 'function') {
+
+		if (console) {
+			console.error('TEGQuiz: Quiz type plugin not found.');
+		} // end if console available
+		return false;
+	}
+
+	// get the form and hide it
+	TEGQuiz.form = jQuery(TEGQuiz.options.formSelector).hide();
+
+	// if no form found, log an error and quit
+	if (TEGQuiz.form.length === 0) {
+
+		if (console) {
+			console.error('TEGQuiz: No form found.');
+		} // end if console available
+		return false;
+	}
+
 	// Parse query string arguments
 	TEGQuiz.args = {};
 	window.location.search.slice(1).split('&').forEach(function(arg) {
@@ -137,17 +171,6 @@ function TEGQuiz(Options) {
 			}
 		}
 	}); // end query string processing
-
-	// get the form and hide it
-	TEGQuiz.form = jQuery(TEGQuiz.options.formSelector).hide();
-
-	// if we're holding to show results before submitting. . .
-	if (TEGQuiz.options.resultsBeforeSubmit) {
-		// . . .then encourage the user to submit the form so we can capture data.
-		jQuery(window).on('beforeunload', function() {
-			return 'ignored value';
-		}); // end window.onBeforeUnload()
-	} // end if we're showing results before submitting
 
 	// run the event handlers for the questions
 	TEGQuiz.runAfterAnswer = function(event) {
@@ -193,13 +216,12 @@ function TEGQuiz(Options) {
 		TEGQuiz.options.afterAnswer.everyTime(event);
 
 		// if there's a custom function for this particular answer, run it
-		if (event.hasOwnProperty('targetElement') &&
-		    event.targetElement.hasOwnProperty('id') &&
-		    TEGQuiz.options.afterAnswer[event.targetElement.id])
-		{
-			// fire the question specific answer event handler
-			if (TEGQuiz.options.afterAnswer[event.targetElement.id]) {
-				TEGQuiz.options.afterAnswer[event.targetElement.id](event);
+		for (var afterAnswerKey in TEGQuiz.options.afterAnswer) {
+
+			if (thisField.is(afterAnswerKey) &&
+			    typeof TEGQuiz.options.afterAnswer[afterAnswerKey] === 'function')
+			{
+				TEGQuiz.options.afterAnswer[afterAnswerKey](event);
 			} // end if there's a question specific event handler
 		} // end if event.targetElement.id exists
 	}; // end runAfterAnswer()
@@ -268,8 +290,10 @@ function TEGQuiz(Options) {
 			event.preventDefault();
 			event.stopImmediatePropagation();
 
-			// We do rather a lot of Engaging Networks customizations.
-			// If this is on EN, the errorHandler will be attached to window.enOnError
+			/* We do rather a lot of Engaging Networks customizations. If this
+			 * form is on EN then the errorHandler will be attached to
+			 * window.enOnError. Otherwise, we need to do it here.
+			 */
 			if (typeof window.EngagingNetworks === 'undefined') {
 				TEGQuiz.errorHandler(event);
 			}
@@ -277,164 +301,137 @@ function TEGQuiz(Options) {
 		return safeToGo;
 	}; // end submitHandler()
 
-	// there really needs to be a form element for this to work at all
-	if (TEGQuiz.form.length > 0) {
-		// collect questions
-		jQuery(document)
-			.ready(function() {
-				/* A quiz form should include only fixed-value fields such as
-				 * radio buttons, checkboxes, and select lists. But we need
-				 * room for future expansion and for per-client or per-form
-				 * customization.
-				 *
-				 * While we're in there, let's make sure there are unique
-				 * "id" attributes.
-				 */
-				TEGQuiz.questions =
-					TEGQuiz.form
-					       .find(TEGQuiz.options.questionSelector)
-					       .filter(function() {
-						       return !jQuery(this).is(TEGQuiz.options.questionExcludeSelector);
-					       })
-					       .change(TEGQuiz.runAfterAnswer);
+	// collect questions
+	jQuery(document)
+		.ready(function() {
+			// collect questions
+			TEGQuiz.questions =
+				TEGQuiz.form
+				       .find(TEGQuiz.options.questionSelector)
+				       .filter(function() {
+					       return !jQuery(this).is(TEGQuiz.options.questionExcludeSelector);
+				       })
+				       .change(TEGQuiz.runAfterAnswer);
 
-				// return the number of answered questions
-				TEGQuiz.getAnswerCount = function() {
-					var numberAnswered = 0;
+			// Now that we have the questions, initialize the quiz type
+			TEGQuiz.quiz = new TEGQuiz.options.newQuiz(
+				jQuery.extend(
+					TEGQuiz.options.quizOptions,
+					{
+						questions: TEGQuiz.questions,
+					}
+				)
+			);
+			jQuery.extend(TEGQuiz.options.submitQueue, TEGQuiz.quiz.options.submitQueue);
+			jQuery.extend(TEGQuiz.options.errorQueue, TEGQuiz.quiz.options.errorQueue);
+			jQuery.extend(TEGQuiz.options.afterAnswer, TEGQuiz.quiz.options.afterAnswer);
 
-					// clear the counted marker before counting the answered questions
-					TEGQuiz.questions
-					       .removeAttr('data-answerCounted')
-					       .each(function(index) {
+			// return the number of answered questions
+			TEGQuiz.getAnswerCount = function() {
+				var numberAnswered = 0;
 
-						       // if this item has not already been counted (since radio buttons and checkboxes might be counted as groups)
-						       if (TEGQuiz.questions.eq(index).attr('data-answerCounted') !== 'undefined') {
+				// clear the counted marker before counting the answered questions
+				TEGQuiz.questions
+				       .removeAttr('data-answerCounted')
+				       .each(function(index) {
 
-							       // count by field type
-							       switch (TEGQuiz.questions.eq(index).fieldType()) {
+					       // if this item has not already been counted (since radio buttons and checkboxes might be counted as groups)
+					       if (TEGQuiz.questions.eq(index).attr('data-answerCounted') !== 'undefined') {
 
-								       case 'radio':
-									       // check if any of this radio button group are checked
-									       if (
-										       TEGQuiz.questions
-										              .find('[name="' +
-										                    TEGQuiz.questions.eq(index) +
-										                    '"]:checked')
-									       )
-									       {
-										       numberAnswered++;
-									       }
+						       // count by field type
+						       switch (TEGQuiz.questions.eq(index).fieldType()) {
+
+							       case 'radio':
+								       // check if any of this radio button group are checked
+								       if (
 									       TEGQuiz.questions
-									              .find('[name="' + TEGQuiz.questions.eq(index) + '"]')
-									              .attr('data-answerCounted', 'true');
-									       break;
-
-								       case 'checkbox':
-									       // check if the checkbox is part of a fieldset
-									       var thisFieldset = TEGQuiz.questions.eq(index).closest('fieldset');
-
-									       /* If the checkbox is part of a fieldset, count all
-									        * checkboxes in the fieldset as a group.
-									        */
-									       if (thisFieldset.length > 0) {
-
-										       // if any of the checkboxes are checked
-										       if (thisFieldset.find('[type="checkbox"]:checked').length > 0) {
-											       numberAnswered++;
-										       } // end if any checkboxes in the
-										       thisFieldset.find('[type="checkbox"]')
-										                   .attr('data-answerCounted', 'true');
-
-									       } else {
-										       TEGQuiz.questions.eq(index)
-										              .attr('data-answerCounted', 'true');
-									       }
-									       break;
-
-								       default:
+									              .find('[name="' +
+									                    TEGQuiz.questions.eq(index) +
+									                    '"]:checked')
+								       )
+								       {
 									       numberAnswered++;
+								       }
+								       TEGQuiz.questions
+								              .find('[name="' + TEGQuiz.questions.eq(index) + '"]')
+								              .attr('data-answerCounted', 'true');
+								       break;
+
+							       case 'checkbox':
+								       // check if the checkbox is part of a fieldset
+								       var thisFieldset = TEGQuiz.questions.eq(index).closest('fieldset');
+
+								       /* If the checkbox is part of a fieldset, count all
+								        * checkboxes in the fieldset as a group.
+								        */
+								       if (thisFieldset.length > 0) {
+
+									       // if any of the checkboxes are checked
+									       if (thisFieldset.find('[type="checkbox"]:checked').length > 0) {
+										       numberAnswered++;
+									       } // end if any checkboxes in the
+									       thisFieldset.find('[type="checkbox"]')
+									                   .attr('data-answerCounted', 'true');
+
+								       } else {
 									       TEGQuiz.questions.eq(index)
 									              .attr('data-answerCounted', 'true');
-							       } // end switch .fieldType()
-						       } // end if already counted
-					       }); // end each()
-				}; // end getAnswerCount()
+								       }
+								       break;
 
-				TEGQuiz.submitButton = TEGQuiz.form.find(TEGQuiz.options.submitSelector);
+							       default:
+								       numberAnswered++;
+								       TEGQuiz.questions.eq(index)
+								              .attr('data-answerCounted', 'true');
+						       } // end switch .fieldType()
+					       } // end if already counted
+				       }); // end each()
+			}; // end getAnswerCount()
 
-				// swaddle the submit button
-				TEGQuiz.submmitted = false;
+			TEGQuiz.submitButton = TEGQuiz.form.find(TEGQuiz.options.submitSelector);
 
-				// Initialize the quiz with the configured quiz type.
-				TEGQuiz.quiz = {
-					getResults: function() {
+			// swaddle the submit button
+			TEGQuiz.submmitted = false;
 
-						if (console) {
-							console.warn('WARNING: TEGQuiz.quiz.getResults not overridden.');
-						} // end if console available
-					}
-				}; // end default TEGQuiz.quiz
+			// set up pagination
+			if (TEGQuiz.options.usePagination) {
+				TEGQuiz.pages = new TEGFakePages(
+					jQuery.extend(TEGQuiz.options.paginationOptions,
+					              {
+						              formSelector: TEGQuiz.options.formSelector,
+					              })
+				);
+				jQuery.extend(TEGQuiz.options.submitQueue, TEGQuiz.pages.options.submitQueue);
+				jQuery.extend(TEGQuiz.options.errorQueue, {
+					// override the default submit handler for all quiz types
+					'99999_pageErrorHandler': function() {
 
-				// if trivia quiz
-				if (TEGQuiz.options.useTrivia) {
-					TEGQuiz.quiz = new TQTrivia(
-						jQuery.extend(TEGQuiz.options.quizOptions,
-						              {questions: TEGQuiz.questions})
-					);
+						// if we're watching for errors
+						if (TEGQuiz.pages.options.errorSelector !== '') {
+							// try to go to the first page with visible errors
+							TEGQuiz.pages.errorPage();
+						}
+					}, // end ['99999_pageErrorHandler']()
+				});
+			} // end if pagination is available
 
-				} else {
+			// run the afterLoad stuff
+			TEGQuiz.options.afterLoad(TEGQuiz.options);
 
-					// if identity quiz
-					if (TEGQuiz.options.useWhoAmI) {
-						TEGQuiz.quiz = new TQWhoAmI(
-							jQuery.extend(TEGQuiz.options.quizOptions,
-							              {questions: TEGQuiz.questions})
-						);
-					} // end if identity type
-				} // end if trivia type
-				jQuery.extend(TEGQuiz.options.submitQueue, TEGQuiz.quiz.options.submitQueue);
-				jQuery.extend(TEGQuiz.options.errorQueue, TEGQuiz.quiz.options.errorQueue);
+			// We do rather a lot of Engaging Networks customizations.
+			if (typeof window.EngagingNetworks === 'object') {
+				// if we're in EN, attach to their events
+				window.enOnSubmit = TEGQuiz.submitHandler;
+				window.enOnError = TEGQuiz.errorHandler;
 
-				// set up pagination
-				if (TEGQuiz.options.usePagination) {
-					TEGQuiz.pages = new TEGFakePages(TEGQuiz.options.paginationOptions);
-					jQuery.extend(TEGQuiz.options.submitQueue, TEGQuiz.pages.options.submitQueue);
-					jQuery.extend(TEGQuiz.options.errorQueue, {
-						// override the default submit handler for all quiz types
-						'99999_pageErrorHandler': function() {
+			} else {
+				TEGQuiz.form
+				       .submit(TEGQuiz.submitHandler);
+			}
 
-							// if we're watching for errors
-							if (TEGQuiz.pages.options.errorSelector !== '') {
-								// try to go to the first page with visible errors
-								TEGQuiz.pages.errorPage();
-							}
-						}, // end ['99999_pageErrorHandler']()
-					});
-				} // end if pagination is available
+			// we're done, show the form
+			TEGQuiz.form.show();
+		}); // end jQuery(document).ready
 
-				// run the afterLoad stuff
-				TEGQuiz.options.afterLoad(TEGQuiz.options);
-
-				// We do rather a lot of Engaging Networks customizations.
-				if (typeof window.EngagingNetworks === 'object') {
-					// if we're in EN, attach to their events
-					window.enOnSubmit = TEGQuiz.submitHandler;
-					window.enOnError = TEGQuiz.errorHandler;
-
-				} else {
-					TEGQuiz.form
-					       .submit(TEGQuiz.submitHandler);
-				}
-
-				// we're done, show the form
-				TEGQuiz.form.show();
-			}); // end jQuery(document).ready
-
-	} else {
-
-		// no form found, log a warning
-		if (console) {
-			console.warn('TEGQuiz: No form found.');
-		} // end if console available
-	} // end if form found
+	return TEGQuiz;
 } // end TEGQuiz constructor
