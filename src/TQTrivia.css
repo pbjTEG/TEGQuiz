@@ -2,26 +2,6 @@
  * You really want to override or edit all of these.
  */
 
-* {
-	-webkit-transition: all 2s ease-in;
-	-moz-transition: all 2s ease-in;
-	-o-transition: all 2s ease-in;
-	-ms-transition: all 2s ease-in;
-	transition: all 2s ease-in;
-}
-
-.explanation {
-	background: rgba(0, 0, 0, .6);
-	border: 2px solid gray;
-	bottom: 0;
-	display: none;
-	left: 0;
-	position: absolute;
-	right: 0;
-	top: 0;
-	z-index: 9999;
-}
-
 @keyframes fadeIn {
 	from {
 		opacity: 0;
@@ -31,16 +11,79 @@
 	}
 }
 
-.show {
-	animation: fadeIn 2s;
-	display: block;
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
-.correct,
-.answered.correct {
-	background: cornflowerblue;
+/* TQTrivia defaults expect TEG Fake Pages */
+.step-item {
+	margin: 20pt auto;
+	max-width: 1024px;
+	position: relative;
 }
 
-.answered {
-	background: darkseagreen;
+.explanation ~ .step-nav .step-next {
+	visibility: hidden;
+}
+
+.explanation,
+.explanation * {
+	visibility: hidden;
+}
+
+.explanation {
+	border: 2px solid gray;
+	padding: 8pt 8pt 0;
+}
+
+.explanation p {
+	margin: 0 0 8pt;
+}
+
+.show,
+.explanation ~ .step-nav .step-next.show,
+.explanation.show,
+.explanation.show * {
+	animation: fadeIn .5s;
+	visibility: visible;
+}
+
+@keyframes flashBorder {
+	0% {
+		border: 2px solid gray;
+	}
+	12.5% {
+		border: 2px solid black;
+	}
+	25% {
+		border: 2px solid gray;
+	}
+	37.5% {
+		border: 2px solid black;
+	}
+	50% {
+		border: 2px solid gray;
+	}
+	62.5% {
+		border: 2px solid black;
+	}
+	75% {
+		border: 2px solid gray;
+	}
+	87.5% {
+		border: 2px solid black;
+	}
+	100% {
+		border: 2px solid gray;
+	}
+}
+
+.correct {
+	animation: flashBorder 2s;
+	border: 2px solid gray;
 }
