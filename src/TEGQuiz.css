@@ -2,9 +2,23 @@
  * You really want to override or edit all of these.
  */
 
-.selected {
-	background: black;
-	color: white;
+* {
+	-webkit-transition: all .5s ease-in;
+	-moz-transition: all .5s ease-in;
+	-o-transition: all .5s ease-in;
+	-ms-transition: all .5s ease-in;
+	transition: all .5s ease-in;
+}
+
+label {
+	border: 2px solid white;
 	display: inline-block;
 	padding: 2pt 2pt 0;
+	vertical-align: top;
+}
+
+.selected {
+	background: black;
+	border: 2px solid black;
+	color: white;
 }
