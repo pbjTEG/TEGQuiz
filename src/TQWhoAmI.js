@@ -65,6 +65,11 @@ function TQWhoAmI(Options) {
 				return true;
 			} // end ['00500_quizErrorHandler']()
 		}, // end errorQueue
+
+		/* To be run after each answer is selected.
+		 * See options.afterAnswer in TEGQuiz.js.
+		 */
+		afterAnswer: {},
 	}; // end TQWhoAmI.options
 	jQuery.extend(TQWhoAmI.options, Options);
 
