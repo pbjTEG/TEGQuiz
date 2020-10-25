@@ -27,12 +27,16 @@
 	position: relative;
 }
 
+/* We do a lot of EN work.
+ * Hide the explanation content  and navigation
+ * only in the live view.
+ */
+.en__component.en__component--copyblock ~ .step-nav .step-next,
 .explanation ~ .step-nav .step-next {
 	visibility: hidden;
 }
-
-.explanation,
-.explanation * {
+body:not(#en__pagebuilder) .explanation,
+body:not(#en__pagebuilder) .explanation * {
 	visibility: hidden;
 }
 
@@ -46,9 +50,10 @@
 }
 
 .show,
+.en__component.en__component--copyblock ~ .step-nav .step-next.show,
 .explanation ~ .step-nav .step-next.show,
-.explanation.show,
-.explanation.show * {
+body:not(#en__pagebuilder) .explanation.show,
+body:not(#en__pagebuilder) .explanation.show * {
 	animation: fadeIn .5s;
 	visibility: visible;
 }

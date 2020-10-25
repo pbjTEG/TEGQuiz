@@ -22,3 +22,20 @@ label {
 	border: 2px solid black;
 	color: white;
 }
+
+/* We do a lot of EN work.
+ * EN BUGFIX: If a block has no visible content its height is 0px and
+ * PageBuilder's editor won't edit it. So set a min-height for components.
+ */
+body#en__pagebuilder .en__component {
+	min-height: 30px;
+}
+
+/* This allows notes to the editors inside of EN Page Builder. */
+body#en__pagebuilder aside.pb-placeholder {
+	color: #888;
+	position: absolute;
+}
+body:not(#en__pagebuilder) aside.pb-placeholder {
+	display: none;
+}

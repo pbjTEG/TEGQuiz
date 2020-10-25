@@ -1,0 +1,37 @@
+<!--
+Ideally the configuration should go in an external JS file. This can also be loaded in a code block.
+-->
+<script>
+	jQuery(document).ready(function() {
+		window.TEGForm = new TEGQuiz({
+			                             // exclude first name, last name, email, and master opt-in
+			                             // Your question ID number will be different.
+			                             questionExcludeSelector: 'div.en__field--firstName input, div.en__field--lastName input, #email, #en__field_supporter_questions_515817',
+
+			                             paginationOptions: {
+				                             // don't allow intra-quiz navigation
+				                             breadcrumbs           : [],
+				                             backButton            : jQuery(''),
+				                             // locate the block to be shifted into the page
+				                             pageItemParentSelector: '.en__component',
+				                             // locate the submit button
+				                             submitSelector        : 'div.en__submit',
+				                             // locate error messages from EN
+				                             errorSelector         : '.en__field__error',
+			                             },
+			                             /* The quizOptions.answers keys must be CSS selectors which
+			                              * identify a group of form fields which make up a question.
+			                              */
+			                             newQuiz          : TQTrivia,
+			                             quizOptions      : {
+				                             answers: {
+					                             '[name="supporter.questions.793382"]': ['blue'],
+					                             '[name="supporter.questions.793383"]': ['11', '111'],
+					                             '[name="supporter.questions.793269"]': ['B'],
+					                             '[name="supporter.questions.793384"]': ['2'],
+				                             }, // end answers
+			                             }, // end quiz options
+		                             });
+		// any additional stuff goes here
+	}); // end jQuery(document).ready
+</script>

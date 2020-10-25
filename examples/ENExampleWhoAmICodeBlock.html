@@ -15,14 +15,15 @@ Ideally the configuration should go in an external JS file. This can also be loa
 				                             // locate error messages from EN
 				                             errorSelector         : '.en__field__error',
 			                             },
-			                             /* The whoAmIOptions.categories keys must match the values of the
+			                             /* The quizOptions.categories keys must match the values of the
 			                              * questions assigned to each category.
 			                              *
 			                              * e.g.
 			                              * <input type="radio" id="foo01" name="foo" value="category01" />
 			                              * <label for="foo01">This selection puts you in Category 1.</label>
 			                              */
-			                             whoAmIOptions          : {
+			                             newQuiz                : TQWhoAmI,
+			                             quizOptions            : {
 				                             categories: {
 					                             'category01': {
 						                             count: 0,
