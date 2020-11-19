@@ -1,0 +1,8 @@
+/* These styles just illustrate what the library does.
+ * You really want to override or edit all of these.
+ */
+
+/* control visibility of branched content with styles */
+fieldset:not(.noBranch) {
+	display: none;
+}

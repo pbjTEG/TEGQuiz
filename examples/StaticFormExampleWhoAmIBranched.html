@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TEG Quiz Static Form Example Who Am I</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="lib/TEGFakePages.min.css" type="text/css" />
+	<link rel="stylesheet" href="../src/TEGQuiz.css" type="text/css" />
+	<link rel="stylesheet" href="../src/TQWhoAmIBranched.css" type="text/css" />
+	<style>
+		form {
+			display: none;
+		}
+	</style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap-grid.min.css" type="text/css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
+	<script src="lib/TEGUtilities.min.js" type="text/javascript"></script>
+	<script src="lib/TEGFakePages.min.js" type="text/javascript"></script>
+	<script src="../src/TEGQuiz.js" type="text/javascript"></script>
+	<script src="../src/TQWhoAmIBranched.js" type="text/javascript"></script>
+	<script>
+		jQuery(document).ready(function() {
+			window.testForm = new TEGQuiz({
+				                              paginationOptions: {
+					                              pageItemParentSelector: '',
+					                              runValidation: 'none',
+					                              submitSelector: 'input[type="submit"]',
+				                              },
+				                              newQuiz          : TQWhoAmIBranched,
+				                              quizOptions      : {
+					                              categories: {
+						                              'category01': {
+							                              count: 0,
+							                              win  : 'You are in Category 1!',
+						                              },
+						                              'category02': {
+							                              count: 0,
+							                              win  : 'You are in Category 2!',
+						                              },
+						                              'category03': {
+							                              count: 0,
+							                              win  : 'You are in Category 3!',
+						                              },
+						                              'category04': {
+							                              count: 0,
+							                              win  : 'You are in Category 4!',
+						                              },
+					                              }, // end categories
+					                              answers   : {
+						                              '#radio211': 'category01',
+						                              '#radio212': 'category02',
+						                              '#radio213': 'category03',
+						                              '#radio214': 'category04',
+					                              }, // end answers
+				                              }, // end whoAmIOptions
+			                              });
+			// any additional stuff goes here
+		}); // end jQuery(document).ready
+	</script>
+</head>
+<body>
+<form action="Confirmation.html" method="get">
+	<h1>What Am I?</h1>
+	<h2 class="step">First Question</h2>
+	<fieldset class="noBranch">
+		<legend>Branching Question No Category</legend>
+		<input type="radio" id="radio101" value="red" name="radio10" data-branch="#branch01" /> <label for="radio101">Branch 1</label><br />
+		<input type="radio" id="radio102" value="yellow" name="radio10" data-branch="#branch02" /> <label for="radio102">Branch 2</label><br />
+		<input type="radio" id="radio103" value="blue" name="radio10" data-branch="#branch03" /> <label for="radio103">Branch 3</label><br />
+		<input type="radio" id="radio104" value="green" name="radio10" data-branch="#branch04" /> <label for="radio104">Branch 4</label>
+	</fieldset>
+	<h2 class="step">Second Question</h2>
+	<fieldset id="branch01">
+		<legend>Branch 1 Question With Category (Answers In Configuration)</legend>
+		<!-- radio group -->
+		<input type="radio" id="radio211" value="one" name="radio21" /> <label for="radio211">Category 1</label><br />
+		<input type="radio" id="radio212" value="two" name="radio21" /> <label for="radio212">Category 2</label><br />
+		<input type="radio" id="radio213" value="three" name="radio21" /> <label for="radio213">Category 3</label><br />
+		<input type="radio" id="radio214" value="four" name="radio21" /> <label for="radio214">Category 4</label><br />
+	</fieldset>
+	<fieldset id="branch02">
+		<legend>Branch 2 Question With Category and Branch</legend>
+		<!-- radio group -->
+		<input type="radio" id="radio221" value="category01" name="radio22" data-branch="#branchA" /> <label for="radio221">Category 1 Branch A</label><br />
+		<input type="radio" id="radio222" value="category02" name="radio22" data-branch="#branchB" /> <label for="radio222">Category 2 Branch B</label><br />
+		<input type="radio" id="radio223" value="category03" name="radio22" data-branch="#branchC" /> <label for="radio223">Category 3 Branch C</label><br />
+		<input type="radio" id="radio224" value="category04" name="radio22" data-branch="#branchD" /> <label for="radio224">Category 4 Branch D</label><br />
+	</fieldset>
+	<fieldset id="branch03">
+		<legend>Branch 3 Question With Category and Branch</legend>
+		<!-- radio group -->
+		<input type="radio" id="radio231" value="category01" name="radio23" data-branch="#branch11" /> <label for="radio231">Category 1 Branch 11</label><br />
+		<input type="radio" id="radio232" value="category02" name="radio23" data-branch="#branch12" /> <label for="radio232">Category 2 Branch 12</label><br />
+		<input type="radio" id="radio233" value="category03" name="radio23" data-branch="#branch13" /> <label for="radio233">Category 3 Branch 13</label><br />
+		<input type="radio" id="radio234" value="category04" name="radio23" data-branch="#branch14" /> <label for="radio234">Category 4 Branch 14</label><br />
+	</fieldset>
+	<fieldset id="branch04">
+		<legend>Branch 4 Question With Category</legend>
+		<!-- radio group -->
+		<input type="radio" id="radio241" value="category01" name="radio24" /> <label for="radio241">Category 1</label><br />
+		<input type="radio" id="radio242" value="category02" name="radio24" /> <label for="radio242">Category 2</label><br />
+		<input type="radio" id="radio243" value="category03" name="radio24" /> <label for="radio243">Category 3</label><br />
+		<input type="radio" id="radio244" value="category04" name="radio24" /> <label for="radio244">Category 4</label><br />
+	</fieldset>
+	<h2 class="step">Third Question</h2>
+	<fieldset class="noBranch">
+		<legend>No Branch Question Without Category</legend>
+		<input type="radio" id="radio3nb1" value="white" name="radio3nb" /> <label for="radio3nb1">White</label><br />
+		<input type="radio" id="radio3nb2" value="red" name="radio3nb" /> <label for="radio3nb2">Red</label><br />
+		<input type="radio" id="radio3nb3" value="yellow" name="radio3nb" /> <label for="radio3nb3">Yellow</label><br />
+		<input type="radio" id="radio3nb4" value="black" name="radio3nb" /> <label for="radio3nb4">Black</label><br />
+	</fieldset>
+	<h2 class="step">Fourth Question</h2>
+	<!--<fieldset class="noBranch">
+		<legend>No Branch Question With Category</legend>
+		<input type="radio" id="radio4nb1" value="category01" name="radio4nb" /> <label for="radio4nb1">Category 1</label><br />
+		<input type="radio" id="radio4nb2" value="category02" name="radio4nb" /> <label for="radio4nb2">Category 2</label><br />
+		<input type="radio" id="radio4nb3" value="category03" name="radio4nb" /> <label for="radio4nb3">Category 3</label><br />
+		<input type="radio" id="radio4nb4" value="category04" name="radio4nb" /> <label for="radio4nb4">Category 4</label><br />
+	</fieldset>-->
+	<fieldset id="branchA">
+		<legend>Branch A Question With Category</legend>
+		<input type="radio" id="radio4A1" value="category01" name="radio4A" /> <label for="radio4A1">Category 1</label><br />
+		<input type="radio" id="radio4A2" value="category02" name="radio4A" /> <label for="radio4A2">Category 2</label><br />
+		<input type="radio" id="radio4A3" value="category03" name="radio4A" /> <label for="radio4A3">Category 3</label><br />
+		<input type="radio" id="radio4A4" value="category04" name="radio4A" /> <label for="radio4A4">Category 4</label><br />
+	</fieldset>
+	<fieldset id="branchB">
+		<legend>Branch B Question With Category</legend>
+		<input type="radio" id="radio4B1" value="category01" name="radio4B" /> <label for="radio4B1">Category 1</label><br />
+		<input type="radio" id="radio4B2" value="category02" name="radio4B" /> <label for="radio4B2">Category 2</label><br />
+		<input type="radio" id="radio4B3" value="category03" name="radio4B" /> <label for="radio4B3">Category 3</label><br />
+		<input type="radio" id="radio4B4" value="category04" name="radio4B" /> <label for="radio4B4">Category 4</label><br />
+	</fieldset>
+	<fieldset id="branchC">
+		<legend>Branch C Question With Category</legend>
+		<input type="radio" id="radio4C1" value="category01" name="radio4C" /> <label for="radio4C1">Category 1</label><br />
+		<input type="radio" id="radio4C2" value="category02" name="radio4C" /> <label for="radio4C2">Category 2</label><br />
+		<input type="radio" id="radio4C3" value="category03" name="radio4C" /> <label for="radio4C3">Category 3</label><br />
+		<input type="radio" id="radio4C4" value="category04" name="radio4C" /> <label for="radio4C4">Category 4</label><br />
+	</fieldset>
+	<fieldset id="branchD">
+		<legend>Branch D Question With Category</legend>
+		<input type="radio" id="radio4D1" value="category01" name="radio4D" /> <label for="radio4D1">Category 1</label><br />
+		<input type="radio" id="radio4D2" value="category02" name="radio4D" /> <label for="radio4D2">Category 2</label><br />
+		<input type="radio" id="radio4D3" value="category03" name="radio4D" /> <label for="radio4D3">Category 3</label><br />
+		<input type="radio" id="radio4D4" value="category04" name="radio4D" /> <label for="radio4D4">Category 4</label><br />
+	</fieldset>
+	<fieldset id="branch11">
+		<legend>Branch 11 Question With Category</legend>
+		<input type="radio" id="radio4111" value="category01" name="radio411" /> <label for="radio4111">Category 1</label><br />
+		<input type="radio" id="radio4112" value="category02" name="radio411" /> <label for="radio4112">Category 2</label><br />
+		<input type="radio" id="radio4113" value="category03" name="radio411" /> <label for="radio4113">Category 3</label><br />
+		<input type="radio" id="radio4114" value="category04" name="radio411" /> <label for="radio4114">Category 4</label><br />
+	</fieldset>
+	<fieldset id="branch12">
+		<legend>Branch 12 Question With Category</legend>
+		<input type="radio" id="radio4121" value="category01" name="radio412" /> <label for="radio4121">Category 1</label><br />
+		<input type="radio" id="radio4122" value="category02" name="radio412" /> <label for="radio4122">Category 2</label><br />
+		<input type="radio" id="radio4123" value="category03" name="radio412" /> <label for="radio4123">Category 3</label><br />
+		<input type="radio" id="radio4124" value="category04" name="radio412" /> <label for="radio4124">Category 4</label><br />
+	</fieldset>
+	<fieldset id="branch13">
+		<legend>Branch 13 Question With Category</legend>
+		<input type="radio" id="radio4131" value="category01" name="radio413" /> <label for="radio4131">Category 1</label><br />
+		<input type="radio" id="radio4132" value="category02" name="radio413" /> <label for="radio4132">Category 2</label><br />
+		<input type="radio" id="radio4133" value="category03" name="radio413" /> <label for="radio4133">Category 3</label><br />
+		<input type="radio" id="radio4134" value="category04" name="radio413" /> <label for="radio4134">Category 4</label><br />
+	</fieldset>
+	<fieldset id="branch14">
+		<legend>Branch 14 Question With Category</legend>
+		<input type="radio" id="radio4141" value="category01" name="radio414" /> <label for="radio4141">Category 1</label><br />
+		<input type="radio" id="radio4142" value="category02" name="radio414" /> <label for="radio4142">Category 2</label><br />
+		<input type="radio" id="radio4143" value="category03" name="radio414" /> <label for="radio4143">Category 3</label><br />
+		<input type="radio" id="radio4144" value="category04" name="radio414" /> <label for="radio4144">Category 4</label><br />
+	</fieldset>
+	<h2 class="step">Results</h2>
+	<p class="results"></p>
+	<input type="submit" value="Submit Survey" />
+</form>
+</body>
+</html>
