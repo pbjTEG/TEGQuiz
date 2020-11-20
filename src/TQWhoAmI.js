@@ -131,22 +131,6 @@ function TQWhoAmI(Options) {
 				        }
 			        } // end if selected
 		        });
-
-		if (console) {
-			console.log('getResults categories');
-
-			for (var key in TQWhoAmI.options.categories) {
-
-				var value = TQWhoAmI.options.categories[key];
-				console.log('  ' + key + ' = ' + value);
-
-				for (var key2 in value) {
-
-					var value2 = value[key2];
-					console.log('    ' + key2 + ' = ' + value2);
-				} // end loop through second level items
-			} // end loop through first level items
-		} // end if console available
 		return highest.win;
 	}; // end getResults()
 
