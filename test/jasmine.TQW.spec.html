@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TEG Quiz Who Am I Branched Quiz</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.6.0/jasmine.css" />
+	<link rel="stylesheet" href="../src/TEGQuiz.css" />
+	<style>
+		form {
+			height: 1px;
+			overflow: hidden;
+		}
+	</style>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.6.0/jasmine.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.6.0/jasmine-html.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.6.0/boot.js"></script>
+	<script type="text/javascript" src="../examples/lib/TEGUtilities.min.js"></script>
+	<script type="text/javascript" src="../src/TQWhoAmI.js"></script>
+	<script type="text/javascript" src="../src/TEGQuiz.js"></script>
+	<script type="text/javascript" src="jasmine.TQW.spec.js"></script>
+</head>
+<body>
+<form action="#" method="get">
+	<h1>What Am I?</h1>
+	<h2 class="step">First Question</h2>
+	<fieldset id="favoriteColor">
+		<legend>What&rsquo;s your favorite color?</legend>
+		<input type="radio" id="radio101" value="category01" name="favoriteColor" /> <label for="radio101">Red</label><br />
+		<input type="radio" id="radio102" value="category02" name="favoriteColor" /> <label for="radio102">Yellow</label><br />
+		<input type="radio" id="radio103" value="category03" name="favoriteColor" checked="checked" /> <label for="radio103">Blue</label><br />
+		<input type="radio" id="radio104" value="category04" name="favoriteColor" /> <label for="radio104">Green</label>
+	</fieldset>
+	<h2 class="step">Second Question</h2>
+	<fieldset id="favoriteNumber">
+		<legend>Select your most favored numbers&hellip;</legend>
+		<!-- checkbox group -->
+		<input type="checkbox" id="checkbox201" value="category01" name="favoriteNumber" /> <label for="checkbox201">One</label><br />
+		<input type="checkbox" id="checkbox202" value="category02" name="favoriteNumber" /> <label for="checkbox202">Eleven</label><br />
+		<input type="checkbox" id="checkbox203" value="category03" name="favoriteNumber" checked="checked" /> <label for="checkbox203">One Hundred Eleven</label><br />
+		<input type="checkbox" id="checkbox204" value="category04" name="favoriteNumber" /> <label for="checkbox204">One Thousand One Hundred and Eleven</label><br />
+	</fieldset>
+	<p>&hellip;and letters.</p>
+	<!-- ungrouped checkboxes with bad values-->
+	<input type="checkbox" id="checkbox205" value="badValue01" name="favoriteLetterA"> <label for="checkbox205">A</label><br />
+	<input type="checkbox" id="checkbox206" value="badValue02" name="favoriteLetterB"> <label for="checkbox206">B</label><br />
+	<input type="checkbox" id="checkbox207" value="badValue03" name="favoriteLetterC"> <label for="checkbox207">C</label><br />
+	<input type="checkbox" id="checkbox208" value="badValue04" name="favoriteLetterD"> <label for="checkbox208">D</label>
+	<h2 class="step">Third Question</h2>
+	<label for="select01">What&rsquo;s your favorite season?</label>
+	<select id="select01" name="favoriteSeason">
+		<option value="category01">Winter</option>
+		<option value="category02">Spring</option>
+		<option value="category03" selected="selected">Summer</option>
+		<option value="category04">Fall</option>
+	</select>
+</form>
+</body>
+</html>
