@@ -129,12 +129,12 @@ function TEGQuiz(Options) {
 		}, // end errorQueue
 
 	}; // end TEGQuiz.options
-	// override with options from new TEGQuiz() statement
-	jQuery.extend(TEGQuiz.options, Options);
+	// override with options from new TEGQuiz() statement using deep copy
+	jQuery.extend(true, TEGQuiz.options, Options);
 
 	// allow form specific overrides
 	if (typeof TEGCustomQuiz !== 'undefined') {
-		jQuery.extend(TEGQuiz.options, TEGCustomQuiz);
+		jQuery.extend(true, TEGQuiz.options, TEGCustomQuiz);
 	}
 
 	// load the quiz type plugin
@@ -311,7 +311,7 @@ function TEGQuiz(Options) {
 				       .filter(function() {
 					       return !jQuery(this).is(TEGQuiz.options.questionExcludeSelector);
 				       })
-				       .change(TEGQuiz.runAfterAnswer);
+				       .on('click change', TEGQuiz.runAfterAnswer);
 
 			// Now that we have the questions, initialize the quiz type
 			TEGQuiz.quiz = new TEGQuiz.options.newQuiz(
@@ -322,9 +322,9 @@ function TEGQuiz(Options) {
 					}
 				)
 			);
-			jQuery.extend(TEGQuiz.options.submitQueue, TEGQuiz.quiz.options.submitQueue);
-			jQuery.extend(TEGQuiz.options.errorQueue, TEGQuiz.quiz.options.errorQueue);
-			jQuery.extend(TEGQuiz.options.afterAnswer, TEGQuiz.quiz.options.afterAnswer);
+			jQuery.extend(true, TEGQuiz.options.submitQueue, TEGQuiz.quiz.options.submitQueue);
+			jQuery.extend(true, TEGQuiz.options.errorQueue, TEGQuiz.quiz.options.errorQueue);
+			jQuery.extend(true, TEGQuiz.options.afterAnswer, TEGQuiz.quiz.options.afterAnswer);
 
 			// return the number of answered questions
 			TEGQuiz.getAnswerCount = function() {
@@ -396,13 +396,13 @@ function TEGQuiz(Options) {
 			// set up pagination
 			if (TEGQuiz.options.usePagination) {
 				TEGQuiz.pages = new TEGFakePages(
-					jQuery.extend(TEGQuiz.options.paginationOptions,
+					jQuery.extend(true, TEGQuiz.options.paginationOptions,
 					              {
 						              formSelector: TEGQuiz.options.formSelector,
 					              })
 				);
-				jQuery.extend(TEGQuiz.options.submitQueue, TEGQuiz.pages.options.submitQueue);
-				jQuery.extend(TEGQuiz.options.errorQueue, {
+				jQuery.extend(true, TEGQuiz.options.submitQueue, TEGQuiz.pages.options.submitQueue);
+				jQuery.extend(true, TEGQuiz.options.errorQueue, {
 					// override the default submit handler for all quiz types
 					'99999_pageErrorHandler': function() {
 

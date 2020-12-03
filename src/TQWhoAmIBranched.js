@@ -1,4 +1,4 @@
-/* TQWhoAmIBranced
+/* TQWhoAmIBranched
  * Turn a form into a fictional identity quiz like "Which Magical House
  * Are You In?" or "What Kind of Vampire Would You Be?" Additionally,
  * add the capacity for branching question flows such that the
@@ -76,9 +76,31 @@ function TQWhoAmIBranched(Options) {
 		/* To be run after each answer is selected.
 		 * See options.afterAnswer in TEGQuiz.js.
 		 */
-		afterAnswer: {},
+		afterAnswer: {
+			// check branch visibility after each answer
+			'*': function(event) {
+				var theQuestion = jQuery(event.target);
+
+				// check the branches
+				if (typeof theQuestion.attr('data-branch') === 'string' &&
+				    theQuestion.getAny() !== '')
+				{
+					/* Show the branch while hiding all sibling elements
+					 * of the same type. These should be the other
+					 * branches.
+					 */
+					var theBranch = jQuery(theQuestion.attr('data-branch'));
+					theBranch
+						.show()
+						.siblings(theBranch[0].nodeName)
+						.hide();
+				}
+				return true;
+			}
+		},
 	}; // end TQWB.options
-	jQuery.extend(TQWB.options, Options);
+	// extend the options with a deep copy
+	jQuery.extend(true, TQWB.options, Options);
 
 	// NOTE: per-form customization should be passed through the TEGQuiz instance using this object.
 
@@ -97,16 +119,6 @@ function TQWhoAmIBranched(Options) {
 			    // while we're at it, set up the branch handler
 			    if (TQWB.options.questions.eq(index).attr('data-branch')) {
 				    TQWB.options.branches[TQWB.options.questions.eq(index).attr('id')] = TQWB.options.questions.eq(index).attr('data-branch');
-				    TQWB.options.questions
-				        .eq(index)
-				        .change(function() {
-					        var thisQuestion = jQuery(this);
-
-					        // if any value available, show the fields for this branch
-					        if (thisQuestion.getAny() !== '') {
-					        	jQuery(TQWB.options.branches[thisQuestion.attr('id')]).show()
-					        } // end if this is checked
-				        }); // end onChange()
 			    } // end if this question has a data-branch attribute
 		    });
 
