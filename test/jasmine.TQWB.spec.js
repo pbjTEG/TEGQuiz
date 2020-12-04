@@ -36,12 +36,12 @@ describe('TEG Quiz with TQWhoAmIBranched', function() {
 					'99999_test': function(event) {
 						return true;
 					},
-				}, // end submitQueue
+				}, // end errorQueue
 				afterAnswer: {
 					'[name="radio414"]': function(event) {
 						return true;
 					},
-				}, // end submitQueue
+				}, // end afterAnswer
 			}, // end whoAmIOptions
 		};
 		window.testForm = new TEGQuiz(window.quizOptions);
@@ -102,31 +102,47 @@ describe('TEG Quiz with TQWhoAmIBranched', function() {
 
 	describe('submitQueue', function() {
 		it('should have functions', function() {
-			expect(Object.keys(testForm.quiz.options.submitQueue).length).toBe(1);
+			expect(Object.keys(testForm.options.submitQueue).length).toBe(2);
 		}); // end it('should have functions')
 		it('should have one named "99999_test"', function() {
-			expect(typeof testForm.quiz.options.submitQueue['99999_test']).toBe('function');
-			expect(testForm.quiz.options.submitQueue['99999_test']()).toBe(true);
+			expect(typeof testForm.options.submitQueue['99999_test']).toBe('function');
+			expect(testForm.options.submitQueue['99999_test']()).toBe(true);
+		}); // end it('should have functions')
+		it('should have one named "00500_quizHandler"', function() {
+			expect(typeof testForm.options.submitQueue['00500_quizHandler']).toBe('function');
+			expect(testForm.options.submitQueue['00500_quizHandler']()).toBe(true);
 		}); // end it('should have functions')
 	}); // end describe('submitQueue')
 
 	describe('errorQueue', function() {
 		it('should have functions', function() {
-			expect(Object.keys(testForm.quiz.options.errorQueue).length).toBe(1);
+			expect(Object.keys(testForm.options.errorQueue).length).toBe(2);
 		}); // end it('should have functions')
 		it('should have one named "99999_test"', function() {
-			expect(typeof testForm.quiz.options.errorQueue['99999_test']).toBe('function');
-			expect(testForm.quiz.options.errorQueue['99999_test']()).toBe(true);
+			expect(typeof testForm.options.errorQueue['99999_test']).toBe('function');
+			expect(testForm.options.errorQueue['99999_test']()).toBe(true);
+		}); // end it('should have functions')
+		it('should have one named "00500_quizErrorHandler"', function() {
+			expect(typeof testForm.options.errorQueue['00500_quizErrorHandler']).toBe('function');
+			expect(testForm.options.errorQueue['00500_quizErrorHandler']()).toBe(true);
 		}); // end it('should have functions')
 	}); // end describe('errorQueue')
 
 	describe('afterAnswer', function() {
 		it('should have functions', function() {
-			expect(Object.keys(testForm.options.afterAnswer).length).toBe(2);
+			expect(Object.keys(testForm.options.afterAnswer).length).toBe(3);
 		}); // end it('should have functions')
 		it('should have one with CSS selector key \'[name="radio414"]\'', function() {
 			expect(typeof testForm.options.afterAnswer['[name="radio414"]']).toBe('function');
 			expect(testForm.options.afterAnswer['[name="radio414"]']()).toBe(true);
+		}); // end it('should have functions')
+		it('should have one with CSS selector key \'everyTime\'', function() {
+			expect(typeof testForm.options.afterAnswer['everyTime']).toBe('function');
+			expect(testForm.options.afterAnswer['everyTime']()).toBe(true);
+		}); // end it('should have functions')
+		it('should have one with CSS selector key \'*\'', function() {
+			expect(typeof testForm.options.afterAnswer['*']).toBe('function');
+			expect(testForm.options.afterAnswer['*'](new Event('testing'))).toBe(true);
 		}); // end it('should have functions')
 	}); // end describe('errorQueue')
 

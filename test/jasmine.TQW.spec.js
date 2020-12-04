@@ -1,4 +1,4 @@
-describe('TEG Quiz with TQWhoAmIBranche', function() {
+describe('TEG Quiz with TQWhoAmI', function() {
 	beforeAll(function() {
 		window.quizOptions = {
 			newQuiz    : TQWhoAmI,
@@ -92,21 +92,29 @@ describe('TEG Quiz with TQWhoAmIBranche', function() {
 
 	describe('submitQueue', function() {
 		it('should have functions', function() {
-			expect(Object.keys(testForm.quiz.options.submitQueue).length).toBe(1);
+			expect(Object.keys(testForm.options.submitQueue).length).toBe(2);
 		}); // end it('should have functions')
 		it('should have one named "99999_test"', function() {
-			expect(typeof testForm.quiz.options.submitQueue['99999_test']).toBe('function');
-			expect(testForm.quiz.options.submitQueue['99999_test']()).toBe(true);
+			expect(typeof testForm.options.submitQueue['99999_test']).toBe('function');
+			expect(testForm.options.submitQueue['99999_test']()).toBe(true);
+		}); // end it('should have functions')
+		it('should have one named "00500_quizHandler"', function() {
+			expect(typeof testForm.options.submitQueue['00500_quizHandler']).toBe('function');
+			expect(testForm.options.submitQueue['00500_quizHandler'](new Event('testing'))).toBe(true);
 		}); // end it('should have functions')
 	}); // end describe('submitQueue')
 
 	describe('errorQueue', function() {
 		it('should have functions', function() {
-			expect(Object.keys(testForm.quiz.options.errorQueue).length).toBe(1);
+			expect(Object.keys(testForm.options.errorQueue).length).toBe(2);
 		}); // end it('should have functions')
 		it('should have one named "99999_test"', function() {
-			expect(typeof testForm.quiz.options.errorQueue['99999_test']).toBe('function');
-			expect(testForm.quiz.options.errorQueue['99999_test']()).toBe(true);
+			expect(typeof testForm.options.errorQueue['99999_test']).toBe('function');
+			expect(testForm.options.errorQueue['99999_test']()).toBe(true);
+		}); // end it('should have functions')
+		it('should have one named "00500_quizErrorHandler"', function() {
+			expect(typeof testForm.options.errorQueue['00500_quizErrorHandler']).toBe('function');
+			expect(testForm.options.errorQueue['00500_quizErrorHandler'](new Event('testing'))).toBe(true);
 		}); // end it('should have functions')
 	}); // end describe('errorQueue')
 
@@ -116,7 +124,11 @@ describe('TEG Quiz with TQWhoAmIBranche', function() {
 		}); // end it('should have functions')
 		it('should have one with CSS selector key \'[name="favoriteColor"]\'', function() {
 			expect(typeof testForm.options.afterAnswer['[name="favoriteColor"]']).toBe('function');
-			expect(testForm.options.afterAnswer['[name="favoriteColor"]']()).toBe(true);
+			expect(testForm.options.afterAnswer['[name="favoriteColor"]'](new Event('testing'))).toBe(true);
+		}); // end it('should have functions')
+		it('should have one with key \'everyTime\'', function() {
+			expect(typeof testForm.options.afterAnswer['everyTime']).toBe('function');
+			expect(testForm.options.afterAnswer['everyTime'](new Event('testing'))).toBe(true);
 		}); // end it('should have functions')
 	}); // end describe('errorQueue')
 

@@ -125,20 +125,23 @@ function TQTrivia(Options) {
 			} // end everyTime()
 		},
 
-		// collection of quiz result messages
+		/* A collection of quiz result messages.
+		 * Each string must be valid HTML with a single
+		 * parent element.
+		 */
 		results: {
 			100:
-				'<h3>Perfect Score!</h3><p>You got everything right. ' +
+				'<div><h3>Perfect Score!</h3><p>You got everything right. ' +
 				'That&rsquo;s <span class="correctQuestions"></span> ' +
-				'out of <span class="totalQuestions"></span>.</p>',
+				'out of <span class="totalQuestions"></span>.</p></div>',
 			90 :
-				'<h3>Excellent!</h3><p>You got most questions right. ' +
+				'<div><h3>Excellent!</h3><p>You got most questions right. ' +
 				'That&rsquo;s <span class="correctQuestions"></span> ' +
-				'out of <span class="totalQuestions"></span>.</p>',
+				'out of <span class="totalQuestions"></span>.</p></div>',
 			50 :
-				'<h3>Were you even paying attention?</h3><p>You got most questions wrong. ' +
+				'<div><h3>Were you even paying attention?</h3><p>You got most questions wrong. ' +
 				'That&rsquo;s only <span class="correctQuestions"></span> ' +
-				'out of <span class="totalQuestions"></span>.</p>',
+				'out of <span class="totalQuestions"></span>.</p></div>',
 		} // end results collection
 	}; // end options
 	jQuery.extend(true, TQTrivia.options, Options);
@@ -250,6 +253,6 @@ function TQTrivia(Options) {
 			.find(TQTrivia.options.questionCorrectSelector)
 			.text(TQTrivia.countCorrect);
 
-		return returnObject.html();
+		return returnObject[0].outerHTML;
 	}; // end getResults()
 } // end TQTrivia()

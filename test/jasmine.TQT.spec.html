@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TEG Quiz Who Am I Branched Quiz</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.6.0/jasmine.css" />
+	<link rel="stylesheet" href="../src/TQTrivia.css" />
+	<link rel="stylesheet" href="../src/TEGQuiz.css" />
+	<style>
+		#triviaQuiz {
+			height: 1px;
+			overflow: hidden;
+		}
+	</style>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.6.0/jasmine.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.6.0/jasmine-html.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.6.0/boot.js"></script>
+	<script type="text/javascript" src="../examples/lib/TEGUtilities.min.js"></script>
+	<script type="text/javascript" src="../src/TQTrivia.js"></script>
+	<script type="text/javascript" src="../src/TEGQuiz.js"></script>
+	<script type="text/javascript" src="jasmine.TQT.spec.js"></script>
+</head>
+<body>
+<section id="triviaQuiz">
+	<p>
+		<span class="viewedQuestions">1</span>
+		<span class="totalQuestions">¿?</span>
+		<span class="correctQuestions">¿?</span>
+	</p>
+	<fieldset id="favoriteColor">
+		<input type="radio" id="radio101" value="red" name="favoriteColor" /> <label for="radio101">Red</label><br />
+		<input type="radio" id="radio102" value="yellow" name="favoriteColor" /> <label for="radio102">Yellow</label><br />
+		<input type="radio" id="radio103" value="blue" name="favoriteColor" /> <label for="radio103">Blue</label><br />
+		<input type="radio" id="radio104" value="green" name="favoriteColor" /> <label for="radio104">Green</label>
+	</fieldset>
+	<div class="explanation">
+		<p>Blue is common as dirt in every new design.</p>
+	</div>
+	<fieldset id="favoriteNumber">
+		<input type="radio" id="radio201" value="1" name="favoriteNumber" /> <label for="radio201">One</label><br />
+		<input type="radio" id="radio202" value="11" name="favoriteNumber" /> <label for="radio202">Eleven</label><br />
+		<input type="radio" id="radio203" value="111" name="favoriteNumber" /> <label for="radio203">One Hundred Eleven</label><br />
+		<input type="radio" id="radio204" value="1111" name="favoriteNumber" /> <label for="radio204">One Thousand One Hundred and Eleven</label>
+	</fieldset>
+	<div class="explanation">
+		<p>Eleven is good. One hundred and eleven is also good.</p>
+	</div>
+	<label for="select01">What&rsquo;s your favorite season?</label>
+	<select id="select01" name="favoriteSeason">
+		<option value=""></option>
+		<option value="0">Winter</option>
+		<option value="1">Spring</option>
+		<option value="2">Summer</option>
+		<option value="3">Fall</option>
+	</select>
+	<div class="explanation">
+		<p>Seriously, it&rsquo;s always Summer.</p>
+	</div>
+	<h2 class="step">Results</h2>
+	<p class="results"></p>
+</section>
+</body>
+</html>
