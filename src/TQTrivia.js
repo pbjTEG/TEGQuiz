@@ -36,8 +36,10 @@ function TQTrivia(Options) {
 		 * uniquely identifies
 		 */
 		answers: {
-			'CSS Selector 01': ['answer 1', 'answer 2'],
-			'CSS Selector 02': ['this answer'],
+			/* @formatter:off
+ 			'CSS Selector 01': ['answer 1', 'answer 2'],
+ 			'CSS Selector 02': ['this answer'],
+ 			 @formatter:on */
 		}, // end answers collection
 
 		// Show the correct answer after each question
@@ -240,7 +242,7 @@ function TQTrivia(Options) {
 			.text(TQTrivia.countQuestions);
 		returnObject
 			.find(TQTrivia.options.questionViewedSelector)
-			.text(TQTrivia.countAnswers + 1);
+			.text(TQTrivia.countViewed);
 		returnObject
 			.find(TQTrivia.options.questionAnsweredSelector)
 			.text(TQTrivia.countAnswers);
@@ -248,6 +250,6 @@ function TQTrivia(Options) {
 			.find(TQTrivia.options.questionCorrectSelector)
 			.text(TQTrivia.countCorrect);
 
-		return returnObject.wrapAll('<div />').parent().html();
+		return returnObject.html();
 	}; // end getResults()
 } // end TQTrivia()
