@@ -110,7 +110,7 @@ describe('TEG Quiz with TQWhoAmIBranched', function() {
 			                                               'That&rsquo;s only <span class="correctQuestions"></span> ' +
 			                                               'out of <span class="totalQuestions"></span>.</p></div>');
 		}); // end it('should have one for 5')
-		it('should have one for 50%', function() {
+		it('should have one for 5%', function() {
 			expect(testForm.quiz.options.results[5]).toBe('<p>results for 5%</p>');
 		}); // end it('should have one for 5')
 	}); // end describe('errorQueue')
