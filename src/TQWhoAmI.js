@@ -71,7 +71,7 @@ function TQWhoAmI(Options) {
 		 */
 		afterAnswer: {},
 	}; // end TQWhoAmI.options
-	jQuery.extend(TQWhoAmI.options, Options);
+	jQuery.extend(true, TQWhoAmI.options, Options);
 
 	// NOTE: per-form customization should be passed through the TEGQuiz instance using this object.
 

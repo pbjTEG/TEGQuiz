@@ -139,7 +139,7 @@ function TQTrivia(Options) {
 				'out of <span class="totalQuestions"></span>.</p>',
 		} // end results collection
 	}; // end options
-	jQuery.extend(TQTrivia.options, Options);
+	jQuery.extend(true, TQTrivia.options, Options);
 
 	// count the questions
 	TQTrivia.countViewed = 0;
