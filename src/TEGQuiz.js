@@ -108,7 +108,7 @@ function TEGQuiz(Options) {
 			'00500_quizHandler': function(event) {
 
 				if (console) {
-					console.warn('005_quizHandler not overridden as expected.');
+					console.warn('00500_quizHandler not overridden as expected.');
 				} // end if console available
 				return true;
 			} // end ['005_quizHandler']()
