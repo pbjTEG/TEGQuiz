@@ -48,18 +48,24 @@
 <h2 id="Requires">Requires</h2>
 <ul>
 	<li><a href="https://jquery.com/download/">jQuery 3.5.1 or later</a></li>
-	<li><a href="https://github.com/pbjoiner/jquery-plugins">jQuery Debounce by Dimitry Filatov</a></li>
+</ul>
+<h2 id="recommended">Recommended</h2>
+<ul>
+	<li><a href="https://getbootstrap.com/docs/4.0/layout/grid/">Boostrap Grid v4</a></li>
 </ul>
 <h2 id="Includes">Includes</h2>
 <ul>
 	<li>TEGQuiz.js, TEGQuiz.css<br />
 		Provides base functionality including input field detection and filtering.
 	</li>
-	<li>Quiz Type Plugin <a href="READMEWhoAmI.html">TQWhoAmI.js</a><br />
-		Provides functionality for identity quizzes such as those that tell a user what magical house they blong too or which character they would be in some entertainment.
-	</li>
 	<li>Quiz Type Plugin <a href="READMETrivia.html">TQTrivia.js</a><br />
 		Provides functionality for trivia quizzes.
+	</li>
+	<li>Quiz Type Plugin <a href="READMEWhoAmI.html">TQWhoAmI.js</a><br />
+		Provides functionality for identity quizzes such as those that tell a user what magical house they belong too or which character they would be in some entertainment.
+	</li>
+	<li>Quiz Type Plugin <a href="READMEWhoAmIBranched.html">TQWhoAmIBranched.js</a><br />
+		Provides functionality for branched path identity quizzes such as those that tell a user what magical house they belong too or which character they would be in some entertainment.
 	</li>
 </ul>
 <h2 id="Installation">Installation</h2>
@@ -160,7 +166,8 @@ jQuery(document).ready(function() {
 		<td id="form">form</td>
 		<td>jQuery Object</td>
 		<td><code class="prettyprint lang-javascript">{[]}</code></td>
-		<td>jQuery object initialized with the HTML element selected by the <code class="prettyprint lang-javascript"><a href="#formSelector">formSelector</a></code> option below. </td>
+		<td>jQuery object initialized with the HTML element selected by the <code class="prettyprint lang-javascript"><a href="#formSelector">formSelector</a></code> option below.
+		</td>
 	</tr>
 	<tr>
 		<td id="questions">questions</td>
@@ -178,7 +185,8 @@ jQuery(document).ready(function() {
 		<td id="submmitted">submmitted</td>
 		<td>Boolean</td>
 		<td><code class="prettyprint lang-javascript">false</code></td>
-		<td>Used in conjunction with the option <code class="prettyprint lang-javascript"><a href="#resultsBeforeSubmit">resultsBeforeSubmit</a></code> to control form submission.</td>
+		<td>Used in conjunction with the option <code class="prettyprint lang-javascript"><a href="#resultsBeforeSubmit">resultsBeforeSubmit</a></code> to control form submission.
+		</td>
 	</tr>
 	<tr>
 		<td id="quiz">quiz</td>
@@ -191,7 +199,8 @@ jQuery(document).ready(function() {
       console.warn('WARNING: TEGQuiz.quiz.getResults not overridden.');
     } // end if console available
   }
-}</pre></td>
+}</pre>
+		</td>
 		<td>A JavaScript object containing the properties and functions defined by the <a href="#Includes">Quiz Type Plugin</a> used.</td>
 	</tr>
 </table>
@@ -261,7 +270,8 @@ jQuery(document).ready(function() {
 		<td>String</td>
 		<td><code class="prettyprint lang-javascript">'selected'</code></td>
 		<td>CSS class name to be added to the labels of selected quiz answers. If answerLabelSelector is set, the library will attempt to add the value of
-			<code class="prettyprint lang-javascript">answerHighlightClass</code> as a CSS class name to the field label when the input field changes.</td>
+			<code class="prettyprint lang-javascript">answerHighlightClass</code> as a CSS class name to the field label when the input field changes.
+		</td>
 	</tr>
 	<tr>
 		<td id="afterAnswer">afterAnswer</td>
@@ -276,9 +286,12 @@ jQuery(document).ready(function() {
            .html(TEGQuiz.quiz.getResults());
     return true;
   },
-}</pre></td>
-		<td>Collection of functions to run after questions are answered. The function named 
-			<code class="prettyprint lang-javascript">everyTime</code> will run when any answer is selected. Additional functions can be added for each question by adding a member with a key value matching the ID of a form element in the <a href="#questions"><code class="prettyprint lang-javascript">questions</code></a> collection.</td>
+}</pre>
+		</td>
+		<td>Collection of functions to run after questions are answered. The function named
+			<code class="prettyprint lang-javascript">everyTime</code> will run when any answer is selected. Additional functions can be added for each question by adding a member with a key value matching the ID of a form element in the
+			<a href="#questions"><code class="prettyprint lang-javascript">questions</code></a> collection.
+		</td>
 	</tr>
 </table>
 <h3>Example of a Custom <code class="prettyprint lang-javascript">afterAnswer</code> Function for a Specific Question</h3>
@@ -320,13 +333,16 @@ jQuery(document).ready(function() {
 		<td id="usePagination">usePagination</td>
 		<td>Boolean</td>
 		<td><code class="prettyprint lang-javascript">typeof TEGFakePages === 'function'</code></td>
-		<td><code class="prettyprint lang-javascript">True</code> if the library <a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a> is available.</td>
+		<td><code class="prettyprint lang-javascript">True</code> if the library
+			<a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a> is available.
+		</td>
 	</tr>
 	<tr>
 		<td id="paginationOptions">paginationOptions</td>
 		<td>Collection</td>
 		<td><code class="prettyprint lang-javascript">{}</code></td>
-		<td>A collection of options to pass to TEG Fake Pages. See <a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a> for full documentation.</td>
+		<td>A collection of options to pass to TEG Fake Pages. See <a href="https://bitbucket.org/engagegroup/teg-fake-pages/src/master/">TEG Fake Pages</a> for full documentation.
+		</td>
 	</tr>
 	<tr>
 		<td id="useTrivia">useTrivia</td>
@@ -356,7 +372,9 @@ jQuery(document).ready(function() {
 		<td id="resultsBeforeSubmit">resultsBeforeSubmit</td>
 		<td>Boolean</td>
 		<td><code class="prettyprint lang-javascript">true</code></td>
-		<td>Determines if results must be calculated and shown to the user before the form is submitted. If this is <code class="prettyprint lang-javascript">true</code> then the first submission will be halted and the results requested from the <a href="#Includes">Quiz Type Plugin</a>.</td>
+		<td>Determines if results must be calculated and shown to the user before the form is submitted. If this is
+			<code class="prettyprint lang-javascript">true</code> then the first submission will be halted and the results requested from the <a href="#Includes">Quiz Type Plugin</a>.
+		</td>
 	</tr>
 	<tr>
 		<td id="resultSelector">resultSelector</td>
@@ -374,7 +392,8 @@ jQuery(document).ready(function() {
               'Options = ' + Options + '\n');
  }
  return false;
-}</pre></td>
+}</pre>
+		</td>
 		<td>CSS selector of HTML element to display the results of the quiz.</td>
 	</tr>
 	<tr>
@@ -388,8 +407,12 @@ jQuery(document).ready(function() {
   } // end if console available
   return true;
  } // end ['005_quizHandler']()
-}</pre></td>
-		<td>A collection of functions to be run as the <code class="prettyprint lang-javascript">form.onSubmit</code> event handler. Each entry in the collection will be run in alphabetical order by key name. The <a href="#Includes">Quiz Type Plugins</a> will override the entry with the key word <code class="prettyprint lang-javascript">00500_quizHandler</code>.</td>
+}</pre>
+		</td>
+		<td>A collection of functions to be run as the
+			<code class="prettyprint lang-javascript">form.onSubmit</code> event handler. Each entry in the collection will be run in alphabetical order by key name. The
+			<a href="#Includes">Quiz Type Plugins</a> will override the entry with the key word <code class="prettyprint lang-javascript">00500_quizHandler</code>.
+		</td>
 	</tr>
 	<tr>
 		<td id="errorQueue">errorQueue</td>
@@ -402,8 +425,12 @@ jQuery(document).ready(function() {
   } // end if console available
   return true;
  }
-}</pre></td>
-		<td>A collection of functions to be run if any of the <code class="prettyprint lang-javascript">form.onSubmit</code> event handlers returns false. Each entry in the collection will be run in alphabetical order by key name. The <a href="#Includes">Quiz Type Plugins</a> will override the entry with the key word <code class="prettyprint lang-javascript">00500_quizErrorHandler</code>.</td>
+}</pre>
+		</td>
+		<td>A collection of functions to be run if any of the
+			<code class="prettyprint lang-javascript">form.onSubmit</code> event handlers returns false. Each entry in the collection will be run in alphabetical order by key name. The
+			<a href="#Includes">Quiz Type Plugins</a> will override the entry with the key word <code class="prettyprint lang-javascript">00500_quizErrorHandler</code>.
+		</td>
 	</tr>
 </table>
 </body>

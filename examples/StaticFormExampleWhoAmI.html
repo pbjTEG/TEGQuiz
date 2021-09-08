@@ -20,34 +20,38 @@
 	<script>
 		jQuery(document).ready(function() {
 			window.TEGForm = new TEGQuiz({
-				                             paginationOptions: {
-					                             pageItemParentSelector: '',
+				                             paginationOptions : {
+					                             formSelector           : 'form',
+					                             submitSelector         : 'input[type="submit"]',
+					                             pageItemParentSelector : '',
+					                             runValidation          : 'none',
+					                             afterLoad              : () => { jQuery('form').show(); }
 				                             },
-				                             newQuiz          : TQWhoAmI,
-				                             quizOptions      : {
-					                             categories: {
-						                             'category01': {
-							                             count: 0,
-							                             win  : 'You are in Category 1!',
+				                             newQuiz           : TQWhoAmI,
+				                             quizOptions       : {
+					                             categories : {
+						                             'category01' : {
+							                             count : 0,
+							                             win   : 'You are in Category 1!',
 						                             },
-						                             'category02': {
-							                             count: 0,
-							                             win  : 'You are in Category 2!',
+						                             'category02' : {
+							                             count : 0,
+							                             win   : 'You are in Category 2!',
 						                             },
-						                             'category03': {
-							                             count: 0,
-							                             win  : 'You are in Category 3!',
+						                             'category03' : {
+							                             count : 0,
+							                             win   : 'You are in Category 3!',
 						                             },
-						                             'category04': {
-							                             count: 0,
-							                             win  : 'You are in Category 4!',
+						                             'category04' : {
+							                             count : 0,
+							                             win   : 'You are in Category 4!',
 						                             },
 					                             }, // end categories
-					                             answers   : {
-						                             '#checkbox205': 'category01',
-						                             '#checkbox206': 'category02',
-						                             '#checkbox207': 'category03',
-						                             '#checkbox208': 'category04',
+					                             answers    : {
+						                             '#checkbox205' : 'category01',
+						                             '#checkbox206' : 'category02',
+						                             '#checkbox207' : 'category03',
+						                             '#checkbox208' : 'category04',
 					                             }, // end answers
 				                             }, // end whoAmIOptions
 			                             });

@@ -27,21 +27,26 @@
 	<script>
 		jQuery(document).ready(function() {
 			window.TEGForm = new TEGQuiz({
-				                             formSelector     : '#triviaQuiz',
-				                             paginationOptions: {
-					                             formSelector          : '#triviaQuiz',
-					                             runValidation         : 'none',
-					                             // don't allow intra-quiz navigation
-					                             breadcrumbs           : [],
-					                             backButton            : jQuery(''),
-					                             pageItemParentSelector: '',
+				                             formSelector      : '#triviaQuiz',
+				                             paginationOptions : {
+					                             formSelector           : '#triviaQuiz',
+					                             submitSelector         : 'input[type="submit"]',
+					                             pageItemParentSelector : '',
+					                             runValidation          : 'none',
+					                             afterLoad              : () => { jQuery('form').show(); }
+					                             /*formSelector          : '#triviaQuiz',
+					                              runValidation         : 'none',
+					                              // don't allow intra-quiz navigation
+					                              breadcrumbs           : [],
+					                              backButton            : jQuery(''),
+					                              pageItemParentSelector: '',*/
 				                             },
-				                             newQuiz          : TQTrivia,
-				                             quizOptions      : {
-					                             answers: {
-						                             '[name="favoriteColor"]' : ['blue'],
-						                             '[name="favoriteNumber"]': ['11', '111'],
-						                             '#select01'              : ['2'],
+				                             newQuiz           : TQTrivia,
+				                             quizOptions       : {
+					                             answers : {
+						                             '[name="favoriteColor"]'  : ['blue'],
+						                             '[name="favoriteNumber"]' : ['11', '111'],
+						                             '#select01'               : ['2'],
 					                             }, // end answers
 				                             }, // end quiz options
 			                             }); // end new TEGQuiz()
