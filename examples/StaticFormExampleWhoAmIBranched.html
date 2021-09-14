@@ -14,43 +14,43 @@
 	</style>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap-grid.min.css" type="text/css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
-	<script src="lib/TEGUtilities.min.js" type="text/javascript"></script>
+	<script src="lib/jQuery.TEGUtilities.min.js" type="text/javascript"></script>
 	<script src="lib/TEGFakePages.min.js" type="text/javascript"></script>
 	<script src="../src/TEGQuiz.js" type="text/javascript"></script>
 	<script src="../src/TQWhoAmIBranched.js" type="text/javascript"></script>
 	<script>
 		jQuery(document).ready(function() {
 			window.testForm = new TEGQuiz({
-				                              paginationOptions: {
-					                              pageItemParentSelector: '',
-					                              runValidation: 'none',
-					                              submitSelector: 'input[type="submit"]',
+				                              paginationOptions : {
+					                              pageItemParentSelector : '',
+					                              runValidation          : 'none',
+					                              submitSelector         : 'input[type="submit"]',
 				                              },
-				                              newQuiz          : TQWhoAmIBranched,
-				                              quizOptions      : {
-					                              categories: {
-						                              'category01': {
-							                              count: 0,
-							                              win  : 'You are in Category 1!',
+				                              newQuiz           : TQWhoAmIBranched,
+				                              quizOptions       : {
+					                              categories : {
+						                              'category01' : {
+							                              count : 0,
+							                              win   : 'You are in Category 1!',
 						                              },
-						                              'category02': {
-							                              count: 0,
-							                              win  : 'You are in Category 2!',
+						                              'category02' : {
+							                              count : 0,
+							                              win   : 'You are in Category 2!',
 						                              },
-						                              'category03': {
-							                              count: 0,
-							                              win  : 'You are in Category 3!',
+						                              'category03' : {
+							                              count : 0,
+							                              win   : 'You are in Category 3!',
 						                              },
-						                              'category04': {
-							                              count: 0,
-							                              win  : 'You are in Category 4!',
+						                              'category04' : {
+							                              count : 0,
+							                              win   : 'You are in Category 4!',
 						                              },
 					                              }, // end categories
-					                              answers   : {
-						                              '#radio211': 'category01',
-						                              '#radio212': 'category02',
-						                              '#radio213': 'category03',
-						                              '#radio214': 'category04',
+					                              answers    : {
+						                              '#radio211' : 'category01',
+						                              '#radio212' : 'category02',
+						                              '#radio213' : 'category03',
+						                              '#radio214' : 'category04',
 					                              }, // end answers
 				                              }, // end whoAmIOptions
 			                              });
